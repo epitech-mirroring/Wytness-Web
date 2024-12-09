@@ -33,6 +33,26 @@
                     :icon="simplifyIcon"
                 />
             </section>
+            <section class="mt-10 pt-12 pb-10 w-full bg-white">
+                <div class="max-w-6xl mx-auto">
+                    <h2 class="text-4xl font-bold text-gray-800 text-center mb-8">
+                        Supported Services
+                    </h2>
+                    <div class="grid grid-cols-3 md:grid-cols-6 gap-4">
+                        <div v-for="service in services"
+                                :key="service.name"
+                                class="flex flex-col items-center justify-center p-4">
+                            <img
+                                :src="service.logo"
+                                :alt="service.name"
+                                class="h-16 w-16 object-contain"
+                            />
+                            <p class="mt-3 text-md font-medium text-gray-700">{{ service.name }}</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
         </main>
     </div>
 </template>
@@ -57,6 +77,21 @@
     const simplifyIcon =    `<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='size-10'>
                                 <path stroke-linecap='round' stroke-linejoin='round' d='m3.75 13.5 10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75Z' />
                             </svg>`
+
+    const services = [
+        { name: 'Apple Music', logo: 'assets/images/service_icons/apple_music.png' },
+        { name: 'Open AI', logo: 'assets/images/service_icons/open_ai.png' },
+        { name: 'Spotify', logo: 'assets/images/service_icons/spotify.png' },
+        { name: 'Discord', logo: 'assets/images/service_icons/discord.png' },
+        { name: 'Revolut', logo: 'assets/images/service_icons/revolut.png' },
+        { name: 'GitHub', logo: 'assets/images/service_icons/github.png' },
+        { name: 'Shazam', logo: 'assets/images/service_icons/shazam.png' },
+        { name: 'Notion', logo: 'assets/images/service_icons/notion.png' },
+        { name: 'Slack', logo: 'assets/images/service_icons/slack.png' },
+        { name: 'Trello', logo: 'assets/images/service_icons/trello.png' },
+        { name: 'Google Trad', logo: 'assets/images/service_icons/google_trad.png' },
+        { name: 'Bluesky', logo: 'assets/images/service_icons/bluesky.png' },
+        ];
 
     const redirectToLogin = () => {
         $router.push('/login');

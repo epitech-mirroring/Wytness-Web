@@ -1,6 +1,6 @@
-    <template>
-    <div class="min-h-screen flex flex-col items-center justify-center">
-        <header class="w-full p-6 text-center">
+<template>
+    <div class="min-h-screen bg-gray-50 flex flex-col items-center justify-center">
+        <header class="w-full p-6 mt-20 text-center">
             <h1 class="text-5xl font-bold text-gray-900">
                 Automate. Connect. Simplify.
             </h1>
@@ -15,8 +15,7 @@
                     Get Started
                 </Button>
             </div>
-
-            <section class="mt-20 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl">
+            <section class="mt-20 mb-8 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl">
                 <FeatureCard
                     title="Connect"
                     description="Easily link your favorite apps and tools."
@@ -53,6 +52,32 @@
                 </div>
             </section>
 
+            <section class="pt-10 w-full bg-blue-50 py-10">
+                <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center md:justify-between px-6 md:px-12">
+                    <div class="text-center md:text-left">
+                        <h2 class="text-3xl font-bold text-gray-800">
+                            Download the App
+                        </h2>
+                        <p class="mt-2 text-gray-600">
+                            Get the best experience on your mobile device. Available on iOS and Android.
+                        </p>
+                    </div>
+                    <div class="ms-6 mt-6 md:mt-0 flex justify-center gap-4">
+                        <a  href="https://www.apple.com/app-store/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <img src="/assets/images/badges/appstore.svg" alt="Download on the AppStore" class="w-60"/>
+                        </a>
+                        <a  href="https://play.google.com/store"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <img src="/assets/images/badges/playstore.png" alt="Download on the PlayStore" class="w-60"/>
+                        </a>
+                    </div>
+                </div>
+            </section>
         </main>
     </div>
 </template>

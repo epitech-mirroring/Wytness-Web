@@ -4,6 +4,12 @@ const serviceStore = useServiceStore();
 onMounted(() => {
   serviceStore.fetchConnections();
 });
+
+definePageMeta({
+  title: "Dashboard - Connections",
+  description: "Dashboard OAuth connections",
+  middleware: ["auth"],
+});
 </script>
 
 <template>

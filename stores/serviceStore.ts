@@ -94,6 +94,13 @@ export const useServiceStore = defineStore("services", () => {
     await fetchConnections();
   }
 
+  function getNodeName(nodeId: number) {
+    const node = services.value
+      .flatMap((service) => service.nodes)
+      .find((node) => node.id === nodeId);
+    return node?.name;
+  }
+
   return {
     services,
     fetchServices,
@@ -102,5 +109,6 @@ export const useServiceStore = defineStore("services", () => {
     getServiceWithId,
     connectService,
     postConnection,
+    getNodeName,
   };
 });

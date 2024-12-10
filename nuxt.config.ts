@@ -1,16 +1,23 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  compatibilityDate: '2024-04-03',
+  compatibilityDate: "2024-04-03",
   devtools: {
     enabled: true,
     timeline: {
       enabled: true,
     },
   },
-  modules: ['shadcn-nuxt', '@nuxtjs/tailwindcss', '@nuxtjs/color-mode', '@pinia/nuxt', 'pinia-plugin-persistedstate/nuxt', '@nuxt/eslint'],
+  modules: [
+    "shadcn-nuxt",
+    "@nuxtjs/tailwindcss",
+    "@nuxtjs/color-mode",
+    "@pinia/nuxt",
+    "pinia-plugin-persistedstate/nuxt",
+    "@nuxt/eslint",
+  ],
   shadcn: {
-    prefix: '',
-    componentDir: './components/ui',
+    prefix: "",
+    componentDir: "./components/ui",
   },
   postcss: {
     plugins: {
@@ -19,40 +26,44 @@ export default defineNuxtConfig({
     },
   },
   alias: {
-    '@/components': './components',
-    '@/lib': './lib',
-    '@/css': './assets/css',
+    "@/components": "./components",
+    "@/lib": "./lib",
+    "@/css": "./assets/css",
   },
   app: {
     head: {
       link: [
         // Google Fonts
         {
-          rel: 'preconnect',
-          href: 'https://fonts.googleapis.com',
+          rel: "preconnect",
+          href: "https://fonts.googleapis.com",
         },
         {
-          rel: 'preconnect',
-          href: 'https://fonts.gstatic.com',
-          crossorigin: '',
+          rel: "preconnect",
+          href: "https://fonts.gstatic.com",
+          crossorigin: "",
         },
         {
-          rel: 'stylesheet',
-          href: 'https://fonts.googleapis.com/css2?family=Climate+Crisis&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap',
+          rel: "stylesheet",
+          href: "https://fonts.googleapis.com/css2?family=Parkinsans:wght@300..800&display=swap",
         },
       ],
       script: [
         // Font Awesome
         {
-          src: 'https://kit.fontawesome.com/a6c187ac23.js',
-          crossorigin: 'anonymous',
+          src: "https://kit.fontawesome.com/a6c187ac23.js",
+          crossorigin: "anonymous",
         },
       ],
     },
   },
   runtimeConfig: {
     public: {
-      'api.baseURL': process.env.API_BASE_URL,
+      apiBaseUrl: process.env.NUXT_PUBLIC_API_BASE_URL,
+      firebaseApiKey: process.env.NUXT_PUBLIC_FIREBASE_API_KEY,
+      firebaseAppId: process.env.NUXT_PUBLIC_FIREBASE_APP_ID,
+      firebaseAuthDomain: process.env.NUXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+      firebaseProjectId: process.env.NUXT_PUBLIC_FIREBASE_PROJECT_ID,
     },
   },
 });

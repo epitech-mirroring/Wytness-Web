@@ -1,4 +1,12 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const serviceStore = useServiceStore();
+
+const authState = useAuthState();
+
+onMounted(() => {
+  serviceStore.fetchServices();
+});
+</script>
 
 <template>
   <NuxtLayout>

@@ -2,8 +2,8 @@
 import WytnessLogo from "~/components/WytnessLogo.vue";
 import { toTypedSchema } from "@vee-validate/zod";
 import { z } from "zod";
-import { useUserStore } from "~/stores/userStore";
 import zxcvbn from "zxcvbn";
+import { useBackend } from "~/composables/useBackend";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -13,13 +13,13 @@ const formSchema = z.object({
   confirmPassword: z.string(),
 });
 
-const userStore = useUserStore();
 const router = useRouter();
+const backend = useBackend();
 
 const onSubmit = async (
   values: Record<string, string | boolean>,
 ): Promise<undefined | string> => {
-  const r = await userStore.register(
+  const r = await backend.register(
     values.email as string,
     values.password as string,
     values.firstName as string,

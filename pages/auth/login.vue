@@ -2,7 +2,7 @@
 import WytnessLogo from "~/components/WytnessLogo.vue";
 import { toTypedSchema } from "@vee-validate/zod";
 import { z } from "zod";
-import { useUserStore } from "~/stores/userStore";
+import { useBackend } from "~/composables/useBackend";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -10,13 +10,14 @@ const formSchema = z.object({
   remember: z.boolean().optional(),
 });
 
-const userStore = useUserStore();
+const backend = useBackend();
 const router = useRouter();
+const { user } = useAuthState();
 
 const onSubmit = async (
   values: Record<string, string | boolean>,
 ): Promise<undefined | string> => {
-  const r = await userStore.login(
+  const r = await backend.login(
     values.email as string,
     values.password as string,
   );
@@ -26,6 +27,12 @@ const onSubmit = async (
     return undefined;
   }
 };
+
+onMounted(() => {
+  if (user) {
+    router.push("/dashboard");
+  }
+});
 </script>
 
 <template>

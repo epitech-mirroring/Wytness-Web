@@ -87,6 +87,7 @@
         background-color: rgba(255, 255, 255, 0.75);
         height: 191px;
         overflow: hidden;
+        user-select: none;
     }
 </style>
 <style>

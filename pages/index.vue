@@ -39,8 +39,8 @@ const services = [
 <template>
   <LandingNavBar />
 
-  <div class="flex ms-[6vw] mt-20">
-    <div class="mt-20 ms-12 sm:ms-24 md:mx-0 xl:mx-0">
+  <div class="flex ms-0 sm:ms-[6vw] mt-20">
+    <div class="mt-0 md:mt-16 mx-auto md:mx-0 md:mx-0 xl:mx-0">
       <p id="title">
         <span id="automate-faster">Automate faster, </span>
         <span id="work-less">work less</span>
@@ -129,12 +129,11 @@ const services = [
       <img id="panel" src="/assets/images/landing_page/panel.png" alt="Panel"/>
     </div>
 
-    <div id="logos">
-      <img id="discord_logo" src="/assets/images/landing_page/discord_logo.png" alt="Logo Discord"/>
-      <img id="spotify_logo" src="/assets/images/landing_page/spotify_logo.png" alt="Logo Spotify"/>
-      <img id="slack_logo" src="/assets/images/landing_page/slack_logo.png" alt="Logo Slack"/>
-    </div>
-
+  </div>
+  <div id="logos">
+    <img id="discord_logo" src="/assets/images/landing_page/discord_logo.png" alt="Logo Discord"/>
+    <img id="spotify_logo" src="/assets/images/landing_page/spotify_logo.png" alt="Logo Spotify"/>
+    <img id="slack_logo" src="/assets/images/landing_page/slack_logo.png" alt="Logo Slack"/>
   </div>
 </template>
 
@@ -164,6 +163,7 @@ const services = [
     position: relative;
     top: 15px;
     left: -1px;
+    user-select: none;
   }
 
   #work-less::after {
@@ -175,6 +175,7 @@ const services = [
     position: relative;
     top: -95px;
     z-index: -1;
+    user-select: none;
   }
 
   #subtitle {
@@ -188,7 +189,7 @@ const services = [
 
     color: #5C5C5C;
 
-    margin-top: 5rem;
+    margin: 5rem 0 0 0;
   }
 
   #card1 {
@@ -208,6 +209,7 @@ const services = [
     height: 676px;
     left: 450px;
     top: -400px;
+    user-select: none;
     z-index: -10;
   }
 
@@ -217,6 +219,7 @@ const services = [
     height: 20px;
     left: 770px;
     top: -1060px;
+    user-select: none;
   }
 
   #white-button-2 {
@@ -225,6 +228,7 @@ const services = [
     height: 20px;
     left: 790px;
     top: -1080px;
+    user-select: none;
   }
 
   #eye {
@@ -248,6 +252,7 @@ const services = [
     position: relative;
     left: 619px;
     top: -1100px;
+    user-select: none;
   }
 
   #workflow-button-1 {
@@ -256,6 +261,7 @@ const services = [
     height: 80px;
     left: 0px;
     top: 500px;
+    user-select: none;
   }
 
   #start-arrow {
@@ -264,6 +270,7 @@ const services = [
     height: 20px;
     left: 78px;
     top: 372px;
+    user-select: none;
   }
 
   #full-line-bottom {
@@ -302,6 +309,7 @@ const services = [
     top: 149px;
 
     z-index: 1;
+    user-select: none;
   }
 
   #workflow-button-2 {
@@ -310,6 +318,7 @@ const services = [
     height: 80px;
     left: 240px;
     top: 225px;
+    user-select: none;
   }
 
   #dashed-line {
@@ -326,6 +335,7 @@ const services = [
     height: 28px;
     left: 342px;
     top: 323px;
+    user-select: none;
   }
 
   #logos {
@@ -335,10 +345,24 @@ const services = [
 
     width: 400px;
     height: 10px;
+    padding-bottom: 50px;
 
-    position: absolute;
+    margin: 200px auto 0 70px;
+
+    /* position: absolute;
     left: 100px;
-    top: 900px;
+    top: 850px; */
+    user-select: none;
+  }
+
+  @media (max-width: 767px) {
+    #logos {
+      margin: 15vh auto 0 auto;
+    }
+
+    #subtitle {
+      margin: 5rem auto 0 auto;
+    }
   }
 
 </style>

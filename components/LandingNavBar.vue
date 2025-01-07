@@ -31,11 +31,19 @@
         font-size: 16px;
     }
 
+    .link:hover {
+        color: #000;
+    }
+
     #login-button {
         font-weight: 600;
         font-size: 20px;
         padding-right: 15px;
         color: black;
+    }
+
+    #login-button:hover {
+        text-decoration: underline;
     }
 
     #sign-up-button {
@@ -45,6 +53,12 @@
         font-weight: 600;
         font-size: 20px;
         color: black;
+    }
+
+    #sign-up-button:hover {
+        background-color: #000;
+        color: white;
+        border-color: #000;
     }
 
     @media (max-width: 830px) {

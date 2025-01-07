@@ -41,11 +41,11 @@ const services = [
 
   <div class="flex ms-0 sm:ms-[6vw] mt-20">
     <div class="mt-0 md:mt-16 mx-auto md:mx-0 md:mx-0 xl:mx-0">
-      <p id="title">
+      <p id="landing-title">
         <span id="automate-faster">Automate faster, </span>
         <span id="work-less">work less</span>
       </p>
-      <p id="subtitle">
+      <p id="landing-subtitle">
         Wytness connects all your services
         so you can spend more time doing
         what you are good at. ⚡️
@@ -138,7 +138,7 @@ const services = [
 </template>
 
 <style>
-  #title {
+  #landing-title {
     width: 478px;
     height: 259px;
 
@@ -178,7 +178,7 @@ const services = [
     user-select: none;
   }
 
-  #subtitle {
+  #landing-subtitle {
     width: 361px;
 
     font-family: 'Parkinsans';

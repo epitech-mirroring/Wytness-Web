@@ -1,38 +1,10 @@
 <script setup lang="ts">
-import FeatureCard from "~/components/ui/FeatureCard.vue";
-import { Button } from "@/components/ui/button";
-import { useRouter } from "vue-router";
-import WindowCard1 from "~/components/WindowCard.vue";
+  import LandingNavBar from "~/components/LandingNavBar.vue";
+  import WindowCard from "~/components/WindowCard.vue";
 
-const router = useRouter();
-
-const automateIcon = `<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='size-10'>
-                                <path stroke-linecap='round' stroke-linejoin='round' d='M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z' />
-                                <path stroke-linecap='round' stroke-linejoin='round' d='M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z' />
-                        </svg>`;
-
-const connectIcon = `<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='size-10'>
-                                <path stroke-linecap='round' stroke-linejoin='round' d='M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244'/>
-                        </svg>`;
-
-const simplifyIcon = `<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='size-10'>
-                                <path stroke-linecap='round' stroke-linejoin='round' d='m3.75 13.5 10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75Z' />
-                            </svg>`;
-
-const services = [
-  { name: "Apple Music", logo: "assets/images/service_icons/apple_music.png" },
-  { name: "Open AI", logo: "assets/images/service_icons/open_ai.png" },
-  { name: "Spotify", logo: "assets/images/service_icons/spotify.png" },
-  { name: "Discord", logo: "assets/images/service_icons/discord.png" },
-  { name: "Revolut", logo: "assets/images/service_icons/revolut.png" },
-  { name: "GitHub", logo: "assets/images/service_icons/github.png" },
-  { name: "Shazam", logo: "assets/images/service_icons/shazam.png" },
-  { name: "Notion", logo: "assets/images/service_icons/notion.png" },
-  { name: "Slack", logo: "assets/images/service_icons/slack.png" },
-  { name: "Trello", logo: "assets/images/service_icons/trello.png" },
-  { name: "Google Trad", logo: "assets/images/service_icons/google_trad.png" },
-  { name: "Bluesky", logo: "assets/images/service_icons/bluesky.png" },
-];
+  useHead({
+    title: "Wytness",
+  });
 </script>
 
 
@@ -54,11 +26,42 @@ const services = [
 
     <!-- Workflow Example -->
     <div class="h-0 hidden md:block ms-[-150px] min-[820px]:ms-[-100px] min-[870px]:ms-[-50px] min-[930px]:ms-[0px] min-[1010px]:ms-[50px] xl:ms-[-10px] min-[1350px]:ms-[-20px] 2xl:ms-[5vw]">
-      <img id="workflow-button-1" src="/assets/images/landing_page/workflow-button-1.png" alt="Workflow Example" />
-      <img id="workflow-button-2" src="/assets/images/landing_page/workflow-button-2.png" alt="Workflow Example" />
-      <img id="start-arrow" src="/assets/images/landing_page/start-arrow.png" alt="Workflow Example" />
-      <img id="end-arrow" src="/assets/images/landing_page/end-arrow.png" alt="Workflow Example" />
-      <img id="cursor" src="/assets/images/landing_page/cursor.png" alt="Workflow Example" />
+      <div id="workflow-button-1" class="workflow-button">
+        <div class="inner-workflow-button">
+          <span class="text-workflow-button">⌘</span>
+        </div>
+      </div>
+      <div id="workflow-button-2" class="workflow-button">
+        <div class="inner-workflow-button">
+          <svg width="32" height="20" viewBox="0 0 32 20">
+            <path d="M3.20312 9.15625C3.0625 9.76562 2.45312 10.1406 1.84375 10C1.23438 9.85938 0.859375 9.25 1 8.64062L2.125 8.875L1 8.64062V8.59375C1.04688 8.59375 1.04688 8.54688 1.04688 8.5C1.04688 8.45312 1.09375 8.35938 1.09375 8.26562C1.1875 8.03125 1.28125 7.70312 1.42188 7.32812C1.70312 6.57812 2.125 5.59375 2.73438 4.5625C3.90625 2.59375 6.01562 0.25 9.25 0.25C11.7812 0.25 13.4688 1.65625 14.5938 3.48438C15.7188 5.21875 16.375 7.51562 17.0312 9.625L17.0781 9.67188C17.7344 11.875 18.3438 13.8906 19.2344 15.3438C20.125 16.75 21.1562 17.5 22.75 17.5C24.7656 17.5 26.2188 16.0938 27.2969 14.3125C27.8125 13.4688 28.1875 12.5781 28.4219 11.9219C28.5625 11.5938 28.6094 11.3125 28.7031 11.125C28.7031 11.0312 28.75 10.9844 28.75 10.9375V10.8906C28.8906 10.2812 29.5 9.90625 30.1094 10.0469C30.7188 10.1875 31.0938 10.7969 30.9531 11.4062L29.875 11.125L30.9531 11.4062V11.4531C30.9531 11.4531 30.9062 11.5 30.9062 11.5469C30.9062 11.5938 30.8594 11.6875 30.8594 11.7812C30.7656 12.0156 30.6719 12.3438 30.5312 12.7188C30.25 13.4688 29.8281 14.4531 29.2188 15.4844C28.0469 17.4531 25.9375 19.75 22.75 19.75C20.1719 19.75 18.4844 18.3906 17.3594 16.5625C16.2344 14.7812 15.5781 12.5312 14.9219 10.4219V10.3281C14.2188 8.17188 13.6094 6.15625 12.7188 4.70312C11.8281 3.29688 10.7969 2.5 9.25 2.5C7.1875 2.5 5.73438 3.95312 4.65625 5.73438C4.14062 6.57812 3.76562 7.46875 3.53125 8.125C3.4375 8.45312 3.34375 8.6875 3.29688 8.875C3.25 8.96875 3.25 9.0625 3.20312 9.10938V9.15625Z" fill="black"/>
+          </svg>
+        </div>
+      </div>
+      <div id="start-arrow">
+        <div id="inner-start-arrow"></div>
+      </div>
+      <svg id="end-arrow" xmlns="http://www.w3.org/2000/svg" width="35" height="36" viewBox="0 0 35 36" fill="none">
+        <g filter="url(#filter0_d_79_4862)">
+          <path d="M29 14.0359C31.6667 15.5755 31.6667 19.4245 29 20.9641L14.75 29.1913C12.0833 30.7309 8.75 28.8064 8.75 25.7272V9.27275C8.75 6.19355 12.0833 4.26906 14.75 5.80866L29 14.0359Z" fill="white"/>
+        </g>
+        <path d="M26 15.7679C27.3333 16.5377 27.3333 18.4623 26 19.2321L14.75 25.7272C13.4167 26.497 11.75 25.5348 11.75 23.9952V11.0048C11.75 9.46521 13.4167 8.50296 14.75 9.27276L26 15.7679Z" fill="#574AE2"/>
+        <defs>
+          <filter id="filter0_d_79_4862" x="4.75" y="3.26679" width="30.25" height="32.4664" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+            <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+            <feOffset dy="2"/>
+            <feGaussianBlur stdDeviation="2"/>
+            <feComposite in2="hardAlpha" operator="out"/>
+            <feColorMatrix type="matrix" values="0 0 0 0 0.359538 0 0 0 0 0.359538 0 0 0 0 0.359538 0 0 0 0.4 0"/>
+            <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_79_4862"/>
+            <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_79_4862" result="shape"/>
+          </filter>
+        </defs>
+      </svg>
+      <svg id="cursor" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28" fill="none">
+        <path d="M21.6088 24.9253L24.9253 21.6088C25.2916 21.2425 25.2916 20.6486 24.9253 20.2822L19.6967 15.0537C19.3014 14.6584 19.3375 14.0072 19.774 13.6579L24.1695 10.1415C24.7645 9.66553 24.5738 8.71638 23.8413 8.50707L3.99688 2.83724C3.28928 2.63507 2.63507 3.28928 2.83724 3.99688L8.50707 23.8413C8.71638 24.5738 9.66553 24.7645 10.1415 24.1695L13.6579 19.774C14.0072 19.3375 14.6584 19.3014 15.0537 19.6967L20.2822 24.9253C20.6486 25.2916 21.2425 25.2916 21.6088 24.9253Z" fill="#776DE3" stroke="#574AE2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
       <div id="full-line-bottom"></div>
       <div id="full-line-top"></div>
       <svg id="dashed-line" width="212" height="14" viewBox="0 0 212 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -72,9 +75,19 @@ const services = [
     <div class="h-0 hidden xl:block xl:ms-[-400px] min-[1350px]:ms-[-350px] min-[1450px]:ms-[-300px] 2xl:ms-[-300px] min-[1600px]:ms-[-250px] min-[1650px]:ms-[-200px] min-[1700px]:ms-[-150px] min-[1780px]:ms-[-50px] min-[1880px]:ms-0">
       <WindowCard id="card1" variant="card1"/>
       <WindowCard id="card2" variant="card2"/>
-      <img id="blue-gradient-block" src="/assets/images/landing_page/blue-gradient-block.png" alt="Forme 'T' en bleu gradient"/>
-      <img id="white-button" src="/assets/images/landing_page/white-button.png" alt="Boutton blanc de fenêtre d'ordinateur"/>
-      <img id="white-button-2" src="/assets/images/landing_page/blue-button-white-border.png" alt="Boutton avec bordure blanche de fenêtre d'ordinateur"/>
+      <svg id="blue-gradient-block" xmlns="http://www.w3.org/2000/svg" width="390" height="676" viewBox="0 0 390 676" fill="none">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M390 31C390 13.8792 376.121 0 359 0H31C13.8792 0 0 13.8792 0 31V233C0 250.121 13.8792 264 31 264H115C132.121 264 146 277.879 146 295V645C146 662.121 159.879 676 177 676H359C376.121 676 390 662.121 390 645V31Z" fill="url(#paint0_radial_66_85)"/>
+        <defs>
+          <radialGradient id="paint0_radial_66_85" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(186.5 187.5) rotate(72.646) scale(460.984 265.952)">
+            <stop stop-color="#776DE3"/>
+            <stop offset="1" stop-color="#3221EE"/>
+          </radialGradient>
+        </defs>
+      </svg>
+      <div id="white-button"></div>
+      <div id="white-button-2">
+        <div id="white-button-2-inner"></div>
+      </div>
 
       <!-- Eye -->
       <svg id="eye" width="282" height="242" viewBox="0 0 282 242" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -103,13 +116,13 @@ const services = [
       </svg>
 
       <!-- Visual Area -->
-      <svg id="visual-area" width="231" height="329" viewBox="0 0 231 329" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg id="visual-area" xmlns="http://www.w3.org/2000/svg" width="231" height="329" viewBox="0 0 231 329" fill="none">
         <g filter="url(#filter0_bd_68_170)">
-        <path d="M15.848 309.435L19.2125 12.1642C19.2125 12.1642 83.95 19.9794 122.986 35.2314C162.021 50.4834 214.909 88.627 214.909 88.627L15.848 309.435Z" fill="white" fill-opacity="0.75" shape-rendering="crispEdges"/>
+          <path d="M15.848 309.435L19.2125 12.1642C19.2125 12.1642 83.95 19.9794 122.986 35.2314C162.021 50.4834 214.909 88.627 214.909 88.627L15.848 309.435Z" fill="white" fill-opacity="0.75"/>
         </g>
         <defs>
           <clipPath id="visual-area-clip">
-            <path d="M15.848 309.435L19.2125 12.1642C19.2125 12.1642 83.95 19.9794 122.986 35.2314C162.021 50.4834 214.909 88.627 214.909 88.627L15.848 309.435Z" fill="white" fill-opacity="0.75" shape-rendering="crispEdges"/>
+            <path d="M15.848 309.435L19.2125 12.1642C19.2125 12.1642 83.95 19.9794 122.986 35.2314C162.021 50.4834 214.909 88.627 214.909 88.627L15.848 309.435Z" fill="white" fill-opacity="0.75"/>
           </clipPath>
           <filter id="filter0_bd_68_170" x="0.548022" y="0.864245" width="229.66" height="327.871" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
             <feFlood flood-opacity="0" result="BackgroundImageFix"/>
@@ -122,20 +135,79 @@ const services = [
             <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
             <feBlend mode="normal" in2="effect1_backgroundBlur_68_170" result="effect2_dropShadow_68_170"/>
             <feBlend mode="normal" in="SourceGraphic" in2="effect2_dropShadow_68_170" result="shape"/>
-        </filter>
+          </filter>
         </defs>
       </svg>
 
-      <img id="panel" src="/assets/images/landing_page/panel.png" alt="Panel"/>
+      <div id="panel">
+        <i class="fa-regular fa-gauge-simple-high text-[20px]"></i>
+        <i class="fa-regular fa-gear text-[20px]"></i>
+        <i class="fa-regular fa-pen text-[20px]"></i>
+        <div class="plus-button">
+          <i class="fa-solid fa-plus text-white"></i>
+        </div>
+      </div>
     </div>
 
   </div>
   <div id="logos">
-    <img id="discord_logo" src="/assets/images/landing_page/discord_logo.png" alt="Logo Discord"/>
-    <img id="spotify_logo" src="/assets/images/landing_page/spotify_logo.png" alt="Logo Spotify"/>
-    <img id="slack_logo" src="/assets/images/landing_page/slack_logo.png" alt="Logo Slack"/>
+    <img class="logo" id="discord_logo" src="/assets/images/landing_page/discord_logo.png" alt="Logo Discord"/>
+    <img class="logo" id="spotify_logo" src="/assets/images/landing_page/spotify_logo.png" alt="Logo Spotify"/>
+    <img class="logo" id="slack_logo" src="/assets/images/landing_page/slack_logo.png" alt="Logo Slack"/>
   </div>
 </template>
+
+<style scoped>
+
+  .logo {
+    width: 121px;
+  }
+
+  .workflow-button {
+    border-radius: 17px;
+    display: flex;
+    width: 80px;
+    height: 80px;
+    padding: 20px;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .inner-workflow-button {
+    display: flex;
+    width: 40px;
+    height: 40px;
+    padding: 5px 10px;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    border-radius: 35px;
+    background: #FFF;
+    box-shadow: -4px 4px 0px 0px rgba(0, 0, 0, 0.37);
+  }
+
+  .text-workflow-button {
+    color: #000;
+    font-size: 30px;
+    user-select: none;
+  }
+
+  .plus-button {
+    display: flex;
+    width: 30px;
+    height: 30px;
+    padding: 6px;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+
+    border-radius: 19px;
+    background: radial-gradient(124.06% 124.06% at 18.75% 22.92%, #574AE2 0%, #776DE3 100%);
+    box-shadow: 0px 4px 5.7px 0px rgba(127, 117, 232, 0.77);
+  }
+
+</style>
 
 <style>
   #landing-title {
@@ -205,8 +277,6 @@ const services = [
 
   #blue-gradient-block {
     position: relative;
-    width: 390px;
-    height: 676px;
     left: 450px;
     top: -400px;
     user-select: none;
@@ -217,18 +287,37 @@ const services = [
     position: relative;
     width: 20px;
     height: 20px;
-    left: 770px;
+    left: 775px;
     top: -1060px;
     user-select: none;
+    border-radius: 36px;
+    background: #FFF;
+    box-shadow: 0px 3px 4px 0px rgba(87, 74, 226, 0.50);
   }
 
   #white-button-2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
     position: relative;
     width: 20px;
     height: 20px;
-    left: 790px;
+    left: 800px;
     top: -1080px;
     user-select: none;
+    border-radius: 36px;
+    background: #FFF;
+    box-shadow: 0px 3px 4px 0px rgba(87, 74, 226, 0.50);
+  }
+
+  #white-button-2-inner {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+
+    border-radius: 26px;
+    background: #3221EE;
   }
 
   #eye {
@@ -253,24 +342,48 @@ const services = [
     left: 619px;
     top: -1100px;
     user-select: none;
+
+    display: flex;
+    width: 198px;
+    padding: 8px 10px;
+    justify-content: space-between;
+    align-items: center;
+    flex: 1 0 0;
+    gap: 19px;
+
+    border-radius: 54px;
+    background: #FFF;
   }
 
   #workflow-button-1 {
     position: relative;
-    width: 80px;
-    height: 80px;
-    left: 0px;
     top: 500px;
-    user-select: none;
+    background: #F4D06F;
+    box-shadow: 0px 4px 3px 0px #F8ECCE inset;
   }
 
   #start-arrow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
     position: relative;
     width: 20px;
     height: 20px;
-    left: 78px;
-    top: 372px;
+    left: 80px;
+    top: 369px;
     user-select: none;
+    border-radius: 36px;
+    background: #FFF;
+    box-shadow: 0px 3px 4px 0px rgba(87, 74, 226, 0.50);
+  }
+
+  #inner-start-arrow {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    border-radius: 26px;
+    background: #574AE2;
   }
 
   #full-line-bottom {
@@ -314,11 +427,10 @@ const services = [
 
   #workflow-button-2 {
     position: relative;
-    width: 80px;
-    height: 80px;
     left: 240px;
     top: 225px;
-    user-select: none;
+    background: #F2545B;
+    box-shadow: 0px 4px 3px 0px #F4B1B4 inset;
   }
 
   #dashed-line {
@@ -345,13 +457,11 @@ const services = [
 
     width: 400px;
     height: 10px;
-    padding-bottom: 50px;
 
     margin: 200px auto 0 70px;
 
-    /* position: absolute;
-    left: 100px;
-    top: 850px; */
+    position: absolute;
+    top: 72vh;
     user-select: none;
   }
 

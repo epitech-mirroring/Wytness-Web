@@ -15,5 +15,11 @@ onMounted(() => {
 </template>
 
 <style>
-@import "~/assets/css/tailwind.css";
+  @import "~/assets/css/tailwind.css";
+  @import url('https://fonts.googleapis.com/css2?family=Parkinsans&display=swap');
+
+  html {
+    font-family: 'Parkinsans', serif;
+  }
+
 </style>

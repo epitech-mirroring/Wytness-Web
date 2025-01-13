@@ -58,7 +58,7 @@ const getPasswordStrength = (
   >
     <form
       id="form"
-      class="z-10 min-w-[33%] w-fit min-h-[66%] h-fit py-5 bg-white border border-gray-300 rounded-lg flex flex-col items-center justify-start backdrop-blur-md bg-opacity-50 gap-3"
+      class="z-10 min-w-[33%] w-fit min-h-[66%] h-fit py-5 bg-white flex flex-col items-center justify-start backdrop-blur-md bg-opacity-50 gap-3"
     >
       <div class="w-full flex flex-col justify-center items-center py-5">
         <svg class="mb-2" xmlns="http://www.w3.org/2000/svg" width="64" height="50" viewBox="0 0 64 50" fill="none">

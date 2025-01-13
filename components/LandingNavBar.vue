@@ -14,7 +14,7 @@
         </div>
         <div class="flex items-center">
             <a tabindex="0" id="login-button">Login</a>
-            <a tabindex="0" id="sign-up-button">Sign up</a>
+            <NuxtLink tabindex="0" id="sign-up-button" to="auth/register">Sign up</NuxtLink>
         </div>
     </div>
 </template>

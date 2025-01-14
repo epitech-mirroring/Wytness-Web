@@ -47,6 +47,10 @@ const getPasswordStrength = (
     label: ["Weak", "Fair", "Good", "Strong", "Very Strong"][strength],
   };
 };
+
+useHead({
+    title: "Wytness - Register",
+  });
 </script>
 
 <template>

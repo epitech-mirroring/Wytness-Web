@@ -13,7 +13,7 @@
             <a tabindex="0" class="link">Maketplace</a>
         </div>
         <div class="flex items-center">
-            <a tabindex="0" id="login-button">Login</a>
+            <NuxtLink tabindex="0" id="login-button" to="/auth/login">Login</NuxtLink>
             <a tabindex="0" id="sign-up-button">Sign up</a>
         </div>
     </div>

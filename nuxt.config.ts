@@ -32,6 +32,9 @@ export default defineNuxtConfig({
   },
   app: {
     head: {
+      htmlAttrs: {
+        lang: 'en',
+      },
       link: [
         // Google Fonts
         {

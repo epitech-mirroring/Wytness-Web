@@ -31,15 +31,15 @@ const onSubmit = async (
   }
 };
 
-// onMounted(() => {
-//   if (user) {
-//     router.push("/dashboard");
-//   }
-// });
+onMounted(() => {
+  if (user) {
+    router.push("/dashboard");
+  }
+});
 
 useHead({
     title: "Wytness Login",
-  });
+});
 </script>
 
 <template>

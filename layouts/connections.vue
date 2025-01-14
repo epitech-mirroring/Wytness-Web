@@ -3,7 +3,7 @@
     <div class="flex flex-col justify-center items-center h-screen w-1/3 max-[1070px]:w-full">
       <slot />
       <div class="absolute bottom-3 w-1/3 flex justify-between items-center gap-5 font-[Inter] text-xs">
-        <p class="text-gray-400 ms-5">© 2024 Wytness. All rights reserved.</p>
+        <p class="text-gray-600 ms-5">© 2024 Wytness. All rights reserved.</p>
         <div class="flex gap-3 items-center me-5">
           <a class="hover:underline">Pricacy Policy</a>
           <div class="w-1 h-1 rounded bg-slate-300"></div>
@@ -17,7 +17,7 @@
         <div class="select-none relative top-[23vh] left-[2vw] min-[1150px]:left-[5vw] xl:left-[12vw] 2xl:left-[20vw]">
           <!-- Discord DM Receive -->
           <div class="h-8 pl-[5px] pr-2.5 bg-white rounded-[7px] shadow-[0px_2px_0px_0px_rgba(0,0,0,0.25)] border border-[#5765f2] justify-start items-center gap-[5px] inline-flex overflow-hidden">
-            <img class="w-8 h-8" src="/assets/images/login/discord.png" />
+            <img class="w-8 h-8" src="/assets/images/login/discord.png" alt="Logo Discord"/>
             <div class="text-black text-[13px] font-medium font-['Parkinsans']">Discord DM Receive</div>
           </div>
           <!-- Start Arrow -->
@@ -47,7 +47,7 @@
           </svg>
           <!-- Spotify Is Playing button -->
           <div class="relative left-[143px] top-[-8px] h-8 px-2.5 py-[5px] bg-white rounded-[7px] shadow-[0px_2px_4.199999809265137px_0px_rgba(28,215,96,0.25)] border border-[#1cd760] justify-start items-center gap-2.5 inline-flex overflow-hidden">
-            <img class="w-[22px] h-[22px]" src="/assets/images/login/spotify.png" />
+            <img class="w-[22px] h-[22px]" src="/assets/images/login/spotify.png" alt="Logo Spotify" />
             <div class="text-black text-[13px] font-medium font-['Parkinsans']">Is playing?</div>
           </div>
           <!-- Start arrow -->
@@ -113,7 +113,7 @@
           </svg>
           <!-- Spotify Stop music button -->
           <div class="relative left-[472px] top-[-132px] h-8 px-2.5 py-[5px] bg-white rounded-[7px] shadow-[0px_2px_4.199999809265137px_0px_rgba(28,215,96,0.25)] border border-[#1cd760] justify-start items-center gap-2.5 inline-flex overflow-hidden">
-            <img class="w-[22px] h-[22px]" src="/assets/images/login/spotify.png" />
+            <img class="w-[22px] h-[22px]" src="/assets/images/login/spotify.png" alt="Logo Spotify" />
             <div class="text-black text-[13px] font-medium font-['Parkinsans']">Stop music</div>
           </div>
           <!-- Inactive button -->
@@ -206,7 +206,7 @@
           </svg>
           <!-- Spotify Play music button -->
           <div class="z-[-1] relative left-[470px] top-[-184px] h-8 px-2.5 py-[5px] bg-white rounded-[7px] shadow-[0px_2px_4.199999809265137px_0px_rgba(28,215,96,0.25)] border border-[#1cd760] justify-start items-center gap-2.5 inline-flex overflow-hidden">
-            <img class="w-[22px] h-[22px]" src="/assets/images/login/spotify.png" />
+            <img class="w-[22px] h-[22px]" src="/assets/images/login/spotify.png" alt="Logo Spotify" />
             <div class="text-black text-[13px] font-medium font-['Parkinsans']">Play music</div>
           </div>
           <!-- Inactive button -->

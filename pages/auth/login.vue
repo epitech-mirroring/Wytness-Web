@@ -36,6 +36,10 @@ const onSubmit = async (
 //     router.push("/dashboard");
 //   }
 // });
+
+useHead({
+    title: "Wytness Login",
+  });
 </script>
 
 <template>
@@ -104,16 +108,16 @@ const onSubmit = async (
               <FormItem
                 class="flex items-center justify-center space-y-0 gap-3"
               >
-                <Checkbox v-bind="componentField" />
+                <Checkbox v-bind="componentField" aria-label="Remember me" />
                 <FormLabel class="font-[Inter]">Remember me</FormLabel>
               </FormItem>
             </FormField>
-            <a class="cursor-pointer text-slate-400 hover:text-slate-700 font-[Inter]">Forgot password?</a>
+            <a class="cursor-pointer text-slate-600 hover:text-black hover:underline font-[Inter]">Forgot password?</a>
           </div>
         </div>
-        <Button type="submit" class="w-full py-6 px-4 text-sm font-[Inter] rounded-md"> Sign In </Button>
+        <Button type="submit" class="w-full py-6 px-4 text-sm font-[Inter] rounded-md">Sign In</Button>
         <div class="mt-2 flex justify-center font-[Inter]">
-          <p class="text-slate-400 me-5">Don't have an account?</p>
+          <p class="text-slate-600 me-5">Don't have an account?</p>
           <NuxtLink class="cursor-pointer text-black hover:underline font-bold" to="/auth/register">Register</NuxtLink>
         </div>
       </div>

@@ -4,11 +4,9 @@ import { onAuthStateChanged } from "@firebase/auth";
 export default defineNuxtRouteMiddleware(async () => {
   const { $firebaseAuth }: { $firebaseAuth: Auth } =
     useNuxtApp() as unknown as { $firebaseAuth: Auth };
-  const router = useRouter();
+  const user = $firebaseAuth.currentUser;
 
-  onAuthStateChanged($firebaseAuth, async (user) => {
-    if (!user) {
-      return router.push("/auth/login");
-    }
-  });
+  if (!user) {
+    return navigateTo("/auth/login");
+  }
 });

@@ -127,7 +127,7 @@
           :problems="workflow.status === 'error'"
         />
         <div v-else class="flex items-center justify-center w-full h-full">
-          <img src="/assets/images/empty-box.png" alt="empty box" class="h-80 w-80 opacity-50" />
+          <img src="/assets/images/dashboard/empty-box.png" alt="empty box" class="h-80 w-80 opacity-50" />
         </div>
       </div>
     </div>

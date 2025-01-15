@@ -23,9 +23,9 @@
 
 <script setup lang="ts">
   interface NavBarButtonProps {
-    buttonName: String,
-    iconName: String,
-    selected: Boolean
+    buttonName: string,
+    iconName: string,
+    selected: boolean
   }
 
   const props = withDefaults(defineProps<NavBarButtonProps>(), {

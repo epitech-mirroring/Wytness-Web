@@ -32,7 +32,13 @@ const onSubmit = async (
 };
 
 onMounted(() => {
-  if (user) {
+  if (user.value) {
+    router.push("/dashboard");
+  }
+});
+
+watchEffect(() => {
+  if (user.value) {
     router.push("/dashboard");
   }
 });

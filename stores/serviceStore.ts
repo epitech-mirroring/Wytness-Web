@@ -5,9 +5,10 @@ export type ServiceMetadata = {
 };
 
 export type ListService = {
-  id: number;
   name: string;
   description: string;
+  logo: string;
+  color: string;
   nodes: ListNode[];
 } & ServiceMetadata;
 
@@ -23,7 +24,7 @@ export type ListNode = {
 };
 
 export type Connection = {
-  serviceId: number;
+  serviceId: string;
   connected: boolean;
   url: string;
 };
@@ -60,11 +61,15 @@ export const useServiceStore = defineStore("services", () => {
     connections.value = await response.json();
   }
 
-  function getServiceWithId(id: number) {
-    return services.value.find((service) => service.id === id);
+  function getServiceWithId(id: string) {
+    const service = services.value.find((service) => service.name === id);
+    if (!service) {
+      throw new Error("Service not found");
+    }
+    return service;
   }
 
-  async function connectService(serviceId: number) {
+  async function connectService(serviceId: string) {
     const connection = connections.value.find(
       (connection) => connection.serviceId === serviceId,
     );
@@ -74,6 +79,23 @@ export const useServiceStore = defineStore("services", () => {
     }
 
     navigateTo(connection.url, { external: true });
+  }
+
+  async function disconnectService(serviceId: string) {
+    const backend = useBackend();
+
+    const response = await backend.authFetch(
+      `/services/${serviceId}/disconnect`,
+      {
+        method: "POST",
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to disconnect service");
+    }
+
+    await fetchConnections();
   }
 
   async function postConnection(serviceName: string, code: string) {
@@ -101,6 +123,10 @@ export const useServiceStore = defineStore("services", () => {
     return node?.name;
   }
 
+  function getNumberOfConnectedServices() {
+    return connections.value.filter((connection) => connection.connected).length;
+  }
+
   return {
     services,
     fetchServices,
@@ -108,7 +134,9 @@ export const useServiceStore = defineStore("services", () => {
     fetchConnections,
     getServiceWithId,
     connectService,
+    disconnectService,
     postConnection,
     getNodeName,
+    getNumberOfConnectedServices,
   };
 });

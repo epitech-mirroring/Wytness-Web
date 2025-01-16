@@ -2,10 +2,11 @@ import { defineStore } from "pinia";
 
 export type WorkflowNode = {
   id: number;
-  nodeID: number;
+  node: ListNode;
   config: unknown;
 
-  next: WorkflowNode[];
+  next: { label: string; next: WorkflowNode[] }[];
+  position: { x: number; y: number };
 };
 
 export type Workflow = {
@@ -71,5 +72,49 @@ export const useWorkflowStore = defineStore("workflows", () => {
     return await fetchWorkflowsWithParams("statistics.duration.start", "ASC", limit);
   }
 
-  return { workflows, fetchWorkflows, fetchWorkflowsWithParams, fetchRecentWorkflows, getWorkflow };
+  async function fetchWorkflowNodes(workflowId: number) : Promise<WorkflowNode[]> {
+    const backend = useBackend();
+
+    const response = await backend.authFetch(`/workflows/${workflowId}/nodes`, {
+      method: "GET",
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch workflow nodes");
+    }
+
+    return await response.json();
+  }
+
+  async function createWorfklow(name: string, description: string) {
+    const backend = useBackend();
+
+    const response = await backend.authFetch("/workflows", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, description }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to create workflow");
+    }
+
+    await fetchWorkflows();
+    return await response.json();
+  }
+
+  function clear() {
+    workflows.value = [];
+  }
+
+  return {
+    workflows,
+    fetchWorkflows,
+    fetchWorkflowsWithParams,
+    fetchRecentWorkflows,
+    getWorkflow,
+    fetchWorkflowNodes,
+    createWorfklow,
+    clear,
+  };
 });

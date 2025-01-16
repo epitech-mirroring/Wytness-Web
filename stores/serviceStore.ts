@@ -20,7 +20,9 @@ export enum NodeType {
 export type ListNode = {
   id: number;
   name: string;
+  description: string;
   type: NodeType;
+  labels: string[];
 };
 
 export type Connection = {
@@ -45,6 +47,22 @@ export const useServiceStore = defineStore("services", () => {
     }
 
     services.value = await response.json();
+  }
+
+  async function fetchServicesNodes() {
+    const backend = useBackend();
+
+    for (const service of services.value) {
+      const response = await backend.authFetch(`/services/${service.name}/nodes`, {
+        method: "GET",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch services nodes");
+      }
+
+      service.nodes = await response.json();
+    }
   }
 
   async function fetchConnections() {
@@ -132,9 +150,15 @@ export const useServiceStore = defineStore("services", () => {
       .length;
   }
 
+  function clear() {
+    services.value = [];
+    connections.value = [];
+  }
+
   return {
     services,
     fetchServices,
+    fetchServicesNodes,
     connections,
     fetchConnections,
     getServiceWithId,
@@ -143,5 +167,6 @@ export const useServiceStore = defineStore("services", () => {
     postConnection,
     getNodeName,
     getNumberOfConnectedServices,
+    clear,
   };
 });

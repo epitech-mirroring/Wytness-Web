@@ -13,7 +13,7 @@
 </script>
 
 <template>
-  <div class="flex px-5 py-2.5 border-b-navbar-border border-b justify-between items-center align-stretch">
+  <div class="flex px-5 py-2.5 border-b-navbar-border border-b justify-between items-center align-stretch bg-white z-50">
     <div class="flex items-center gap-5">
       <svg
         v-if="props.addLogo"

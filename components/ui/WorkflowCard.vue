@@ -18,8 +18,7 @@ import LogoSquare from './logoSquare.vue'
     workflowName: 'Workflow',
     workflowDescription: 'Description',
     active: false,
-    problems: false,
-    services: []
+    problems: false
   });
 
   const router = useRouter();
@@ -37,8 +36,10 @@ import LogoSquare from './logoSquare.vue'
 
   onMounted( async () => {
     workflowStat.value = await statisticStore.getWorkflowStatistic(props.workflowId);
-    console.log("active", props.active);
-    console.log("problems", props.problems);
+  });
+
+  watch(() => props.workflowId, async () => {
+    workflowStat.value = await statisticStore.getWorkflowStatistic(props.workflowId);
   });
 
   const activateWorkflow = (active : boolean) => {

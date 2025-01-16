@@ -121,17 +121,9 @@ export const useBackend = () => {
     await signInWithCustomToken($firebaseAuth, data.token);
   };
 
-  const logout = async () => {
-    await $firebaseAuth.signOut();
-
-    const router = useRouter();
-    await router.push("/");
-  };
-
   return {
     authFetch,
     login,
     register,
-    logout,
   };
 };

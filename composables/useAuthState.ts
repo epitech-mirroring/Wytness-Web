@@ -40,5 +40,20 @@ export const useAuthState = () => {
     isAlreadyListening.value = true;
   });
 
-  return { user };
+  const logout = async () => {
+    await $firebaseAuth.signOut();
+
+    const router = useRouter();
+    const servicesStore = useServiceStore();
+    const workflowsStore = useWorkflowStore();
+    const statisticStore = useStatisticStore();
+
+    await router.push("/");
+
+    servicesStore.clear();
+    workflowsStore.clear();
+    statisticStore.clear();
+  };
+
+  return { user, logout };
 };

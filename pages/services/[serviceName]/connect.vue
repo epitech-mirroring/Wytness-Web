@@ -5,13 +5,14 @@ const { user } = useAuthState();
 const router = useRouter();
 const serviceStore = useServiceStore();
 
-onMounted(() => {
+onMounted(async() => {
   if (!user) {
     router.push("/");
   } else if (!code || typeof code !== "string") {
-    router.push("/dashboard/settings/connections");
+    router.push("/connections");
   } else {
-    serviceStore.postConnection(serviceName as string, code);
+    await serviceStore.postConnection(serviceName as string, code);
+    router.push("/connections");
   }
 });
 </script>

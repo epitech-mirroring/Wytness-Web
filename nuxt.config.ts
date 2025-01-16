@@ -1,6 +1,10 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: "2024-04-03",
+  devServer: {
+    port: parseInt(process.env.PORT || "3000"),
+    host: "0.0.0.0",
+  },
   devtools: {
     enabled: true,
     timeline: {
@@ -33,7 +37,7 @@ export default defineNuxtConfig({
   app: {
     head: {
       htmlAttrs: {
-        lang: 'en',
+        lang: "en",
       },
       link: [
         // Google Fonts

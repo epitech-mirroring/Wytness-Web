@@ -1,17 +1,27 @@
 <script setup lang="ts">
 const serviceName = useRoute().params.serviceName;
-const { code } = useRoute().query;
+const query = useRoute().query;
 const { user } = useAuthState();
 const router = useRouter();
 const serviceStore = useServiceStore();
 
-onMounted(() => {
+onMounted(async () => {
   if (!user) {
-    router.push("/");
-  } else if (!code || typeof code !== "string") {
-    router.push("/dashboard/settings/connections");
+    await router.push("/");
+  } else if (
+    !query.code ||
+    typeof query.code !== "string" ||
+    !query.state ||
+    typeof query.state !== "string"
+  ) {
+    await router.push("/connections");
   } else {
-    serviceStore.postConnection(serviceName as string, code);
+    await serviceStore.postConnection(
+      serviceName as string,
+      query.code,
+      query.state,
+    );
+    await router.push("/connections");
   }
 });
 </script>

@@ -98,14 +98,18 @@ export const useServiceStore = defineStore("services", () => {
     await fetchConnections();
   }
 
-  async function postConnection(serviceName: string, code: string) {
+  async function postConnection(
+    serviceName: string,
+    code: string,
+    state: string,
+  ) {
     const backend = useBackend();
     const response = await backend.authFetch(
       `/services/${serviceName}/connect`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code }),
+        body: JSON.stringify({ code, state }),
       },
     );
 
@@ -124,7 +128,8 @@ export const useServiceStore = defineStore("services", () => {
   }
 
   function getNumberOfConnectedServices() {
-    return connections.value.filter((connection) => connection.connected).length;
+    return connections.value.filter((connection) => connection.connected)
+      .length;
   }
 
   return {

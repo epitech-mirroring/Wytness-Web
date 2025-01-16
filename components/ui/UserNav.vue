@@ -18,10 +18,6 @@ import {
 import { ref } from 'vue';
 import { onMounted } from 'vue';
 
-const id = ref('1');
-const email = ref('m@example.com');
-const name = ref('Name');
-const surname = ref('surname').value.toUpperCase();
 const authState = useAuthState();
 
 </script>
@@ -51,7 +47,7 @@ const authState = useAuthState();
         </div>
       </DropdownMenuLabel>
       <DropdownMenuSeparator />
-      <DropdownMenuItem>
+      <DropdownMenuItem class="focus:bg-navbar-hover-background" @click="authState.logout()">
         Log out
         <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
       </DropdownMenuItem>

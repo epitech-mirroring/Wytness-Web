@@ -28,7 +28,6 @@
     maxDataDownload.value = getMaxData(userDataDownload.value);
     maxDataUpload.value = getMaxData(userDataUpload.value);
     recentWorkflows.value = await workflowStore.fetchRecentWorkflows(5);
-    console.log(recentWorkflows.value);
   });
 
   const getMaxData = (consumedData: number) => {
@@ -50,7 +49,7 @@
 <template>
   <div class="w-full h-full flex flex-col items-start justify-start p-5 gap-5">
     <div class="flex flex-wrap w-full justify-between gap-1.5">
-      <div class="flex items-center justify-center flex-col p-5 border border-navabar-border rounded-xl shadow-md min-w-56">
+      <div class="flex items-center justify-center flex-col p-5 border border-navabar-border rounded-xl shadow-md min-w-56 max-[945px]:hidden">
         <div class="flex flex-col items-center gap-5 p-5">
           <span class=" text-dashboard-kpi text-8xl">{{ statisticStore.userStatistic.successfulExecutions }}</span>
 
@@ -83,7 +82,7 @@
         </div>
       </div>
 
-      <div class="flex items-center justify-center flex-col p-5 border border-navabar-border rounded-xl shadow-md">
+      <div class="flex items-center justify-center flex-col p-5 border border-navabar-border rounded-xl shadow-md max-[1140px]:hidden">
         <div class="flex flex-col items-center gap-5 p-5">
           <span class=" text-dashboard-kpi text-8xl">{{ statisticStore.userStatistic.nodesExecuted }}</span>
 
@@ -96,7 +95,7 @@
 
 
 
-      <div class="flex items-center justify-center flex-col p-5 border border-navabar-border rounded-xl shadow-md min-w-56	">
+      <div class="flex items-center justify-center flex-col p-5 border border-navabar-border rounded-xl shadow-md min-w-56 max-[1380px]:hidden">
         <div class="flex flex-col items-center gap-5 p-5">
           <span class=" text-dashboard-kpi text-8xl">{{ serviceStore.getNumberOfConnectedServices() }}</span>
 
@@ -127,7 +126,7 @@
           :problems="workflow.status === 'error'"
         />
         <div v-else class="flex items-center justify-center w-full h-full">
-          <img src="/assets/images/dashboard/empty-box.png" alt="empty box" class="h-80 w-80 opacity-50" />
+          <img src="/public/assets/images/dashboard/empty-box.png" alt="empty box" class="h-80 w-80 opacity-50" />
         </div>
       </div>
     </div>

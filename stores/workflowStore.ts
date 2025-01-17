@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 
 export type WorkflowNode = {
   id: number;
-  node: ListNode;
+  nodeId: number;
   config: unknown;
 
   next: { label: string; next: WorkflowNode[] }[];

@@ -94,7 +94,7 @@ const nodesElements = ref<Node[]>([
 function addNewWorkflowNodeElement(workflowNode : WorkflowNode) {
   nodesElements.value.push({
     id: workflowNode.id,
-    name: workflowNode.node.name,
+    name: "This is a Node",
     logoLink: "https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg",
     config: workflowNode.config,
   });

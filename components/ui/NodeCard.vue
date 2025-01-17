@@ -113,7 +113,7 @@ function dropLinkOnNode(event: MouseEvent) {
 
     <div
       v-if="node && node.labels && node.labels.length > 1"
-      class="flex items-center bg-white absolute -bottom-2.5 inset-x-2/4 -translate-x-2/4 p-0.5 h-4 w-4 rounded-full shadow-md"
+      class="flex items-center bg-white absolute -right-2.5 inset-y-2/4 -translate-y-2/4 p-0.5 h-4 w-4 rounded-full shadow-md"
       @mousedown="(event) => linkNode(event, node.labels[1])"
       :id="node.labels[1] + props.id"
     >

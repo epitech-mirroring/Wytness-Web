@@ -2,7 +2,7 @@
   import { useStatisticStore } from '#build/imports'
   import { SwitchSquare } from '@/components/ui/switch'
   import { onMounted } from 'vue'
-  import LogoSquare from './LogoSquare.vue'
+  import LogoSquare from './logoSquare.vue'
 
   interface WorkflowCardProps {
     workflowId: number,

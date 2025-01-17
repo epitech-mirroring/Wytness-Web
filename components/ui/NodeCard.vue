@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, onMounted } from "vue";
+import LogoSVG from "./LogoSVG.vue";
 
 interface NodeCardProps {
   id: number,
-  name: string,
-  logoLink: string,
+  nodeId: number,
   x: number,
   y: number
 }
@@ -13,17 +13,26 @@ const emit = defineEmits(['linkNode', 'dropLinkOnNode', 'moveNode', 'unlinkNode'
 
 const props = withDefaults(defineProps<NodeCardProps>(), {
   id: 0,
-  name: 'This is a Node',
-  logoLink: 'https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg',
+  nodeId: 0,
   x: 100,
   y: 100,
 })
+
+const node = ref<ListNode>({} as ListNode);
+const service = ref<ListService>({} as ListService);
+const serviceStore = useServiceStore();
+
 const x = ref(props.x);
 const y = ref(props.y);
 const newX = ref(props.x);
 const newY = ref(props.y);
 const startX = ref(0);
 const startY = ref(0);
+
+onMounted(async () => {
+  node.value = await serviceStore.getNode(props.nodeId) || {id: 0, name: 'Node', description: "This is a Node", type: NodeType.ACTION, labels: []};
+  service.value = serviceStore.getServiceFromNode(props.nodeId) || {name: 'Service', description: "This is a Service", logo: "https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg", color: "#1ED760", nodes: [{} as ListNode], useOAuth: false};
+});
 
 function drag(event: MouseEvent) {
   startX.value = event.clientX;
@@ -49,13 +58,13 @@ function move(event: MouseEvent) {
   emit('moveNode', props.id, x.value, y.value);
 }
 
-function linkNode(event: MouseEvent) {
+function linkNode(event: MouseEvent, label: string) {
   event.stopPropagation();
-  const outputLink = document.getElementById('outputLink'+props.id);
+  const outputLink = document.getElementById(`${label}${props.id}`);
   if (!outputLink) {
     return;
   }
-  emit('linkNode', props.id, outputLink.getBoundingClientRect().left + outputLink.getBoundingClientRect().width / 2, outputLink.getBoundingClientRect().top + outputLink.getBoundingClientRect().height / 2);
+  emit('linkNode', props.id, label, outputLink.getBoundingClientRect().left + outputLink.getBoundingClientRect().width / 2, outputLink.getBoundingClientRect().top + outputLink.getBoundingClientRect().height / 2);
 }
 
 function unlinkNode(event: MouseEvent) {
@@ -64,7 +73,7 @@ function unlinkNode(event: MouseEvent) {
 }
 
 function dropLinkOnNode(event: MouseEvent) {
-  const inputLink = document.getElementById('inputLink'+props.id);
+  const inputLink = document.getElementById('input'+props.id);
   if (!inputLink) {
     return;
   }
@@ -75,26 +84,46 @@ function dropLinkOnNode(event: MouseEvent) {
 
 <template>
   <div
-    class="flex items-center pl-1.5 gap-1.5 pr-2.5 bg-white rounded border border-black shadow-sm absolute cursor-pointer select-none"
-    :style="{ top: y + 'px', left: x + 'px', zIndex: 2 }"
+    class="flex items-center pl-1.5 gap-1.5 pr-2.5 bg-white rounded border border-black absolute cursor-pointer select-none service-card"
+    :style="{ top: y + 'px', left: x + 'px', zIndex: 2, 'border-color': service.color, '--color': service.color }"
+    :class="service.color === '#FFFFFF' ? 'border-navbar-border' : ''"
     @mousedown="drag"
     @mouseup="dropLinkOnNode"
   >
-    <img :src="props.logoLink" alt="spotify logo" class="h-8 w-8 rounded-full">
+    <div class="h-8 w-8 rounded-full">
+      <LogoSVG
+        :serviceName="service.name"
+        :logoUrl="service.logo"
+        :color="service.color"
+        :width="22"
+        :height="22"
+      />
+    </div>
 
-    <span class="text-sm font-medium">{{ props.name }}</span>
+    <span class="text-sm font-medium">{{ node.name }}</span>
 
     <div
+      v-if="node && node.labels && node.labels.length >= 1"
       class="flex items-center bg-white absolute -bottom-2.5 inset-x-2/4 -translate-x-2/4 p-0.5 h-4 w-4 rounded-full shadow-md"
-      @mousedown="linkNode"
-      :id="'outputLink'+props.id"
+      @mousedown="(event) => linkNode(event, node.labels[0])"
+      :id="node.labels[0] + props.id"
+    >
+      <div class="bg-primary rounded-full h-3 aspect-square"></div>
+    </div>
+
+    <div
+      v-if="node && node.labels && node.labels.length > 1"
+      class="flex items-center bg-white absolute -bottom-2.5 inset-x-2/4 -translate-x-2/4 p-0.5 h-4 w-4 rounded-full shadow-md"
+      @mousedown="(event) => linkNode(event, node.labels[1])"
+      :id="node.labels[1] + props.id"
     >
       <div class="bg-primary rounded-full h-3 aspect-square"></div>
     </div>
 
 
     <svg
-      :id="'inputLink'+props.id"
+      v-if="node.type === NodeType.ACTION"
+      :id="'input'+props.id"
       class="absolute -left-5 inset-y-2/4 -translate-y-2/4 select-none"
       xmlns="http://www.w3.org/2000/svg"
       width="26"
@@ -123,5 +152,10 @@ function dropLinkOnNode(event: MouseEvent) {
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+  .service-card {
+    --color: #1CD760;
+    --shadow-color: rgb(from var(--color) r g b / 0.3);
+    box-shadow: 0px 2px 4.2px 0px var(--shadow-color);
+  }
 </style>

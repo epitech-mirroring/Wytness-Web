@@ -76,8 +76,7 @@ onMounted(async () => {
 
 interface Node {
   id: number;
-  name: string;
-  logoLink: string;
+  nodeId: number;
   config: unknown;
 }
 
@@ -94,8 +93,7 @@ const nodesElements = ref<Node[]>([
 function addNewWorkflowNodeElement(workflowNode : WorkflowNode) {
   nodesElements.value.push({
     id: workflowNode.id,
-    name: "This is a Node",
-    logoLink: "https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg",
+    nodeId: workflowNode.nodeId,
     config: workflowNode.config,
   });
   workflowNode.next.forEach((nextNode) => {
@@ -109,28 +107,30 @@ function addNewWorkflowNodeElement(workflowNode : WorkflowNode) {
 function addLinkBetweenWorkflowNodes(workflowNode : WorkflowNode) {
   const workflowId = workflowNode.id;
   workflowNode.next.forEach((nextNode) => {
+    const label = nextNode.label;
     nextNode.next.forEach((nextNode) => {
       console.log("Try to link", workflowId, nextNode.id);
-      linkTwoNode(nextNode.id, workflowId);
+      linkTwoNode(nextNode.id, workflowId, label);
       addLinkBetweenWorkflowNodes(nextNode);
     });
   });
 }
 
-const addNewNodeElement = (id: number, config: unknown) => {
-  nodesElements.value.push({
-    id: id,
-    name: "This is a Node",
-    logoLink: "https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg",
-    config: config,
-  });
-};
+// const addNewNodeElement = (id: number, config: unknown) => {
+//   nodesElements.value.push({
+//     id: id,
+//     name: "This is a Node",
+//     logoLink: "https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg",
+//     config: config,
+//   });
+// };
 
 const linksBetweenNodes = ref<Link[]>([]);
 
 const isLinking = ref(false);
 const currentLinkingNodePosition = ref({ x: 0, y: 0 });
 const currentLinkingNodeId = ref(0);
+const currentLabel = ref("");
 
 const links = ref<HTMLDivElement[]>([]);
 
@@ -151,16 +151,18 @@ function unlinkNode(nodeId: number) {
   linksBetweenNodes.value = linksBetweenNodes.value.filter((link) => link.inputNodeId !== nodeId);
 }
 
-function linkNode(nodeId: number, x: number, y: number) {
+function linkNode(nodeId: number, label: string, x: number, y: number) {
   if (isLinking.value) {
     isLinking.value = false;
     currentLinkingNodePosition.value = { x: 0, y: 0 };
+    currentLinkingNodeId.value = 0;
     window.removeEventListener("mousemove", move);
     window.removeEventListener("mouseup", drop);
   } else {
     isLinking.value = true;
     currentLinkingNodeId.value = nodeId;
     currentLinkingNodePosition.value = { x: x-2, y: y-2 };
+    currentLabel.value = label;
     links.value.push(createLink(x-2, y-2, x-2, y-2));
     window.addEventListener("mousemove", move);
     window.addEventListener("mouseup", drop);
@@ -212,6 +214,7 @@ function updateLink(htmlDivElem : HTMLDivElement, x1: number, y1: number, x2: nu
 function drop(event: MouseEvent) {
   isLinking.value = false;
   currentLinkingNodePosition.value = { x: 0, y: 0 };
+  currentLabel.value = "";
   currentLinkingNodeId.value = 0;
   const lastLink = links.value[links.value.length - 1];
   lastLink.remove();
@@ -238,26 +241,27 @@ function dropLinkOnNode(nodeId: number, x: number, y: number) {
       outputNodeId: currentLinkingNodeId.value,
       inputNodeId: nodeId,
       htmlDivElem: finalLink,
-      label: "",
+      label: currentLabel.value,
     });
   }
   lastLink.remove();
   links.value.pop();
   isLinking.value = false;
   currentLinkingNodePosition.value = { x: 0, y: 0 };
+  currentLabel.value = "";
   window.removeEventListener("mousemove", move);
   window.removeEventListener("mouseup", drop);
 }
 
-function linkTwoNode(inputNodeId: number, outputNodeId: number) {
+function linkTwoNode(inputNodeId: number, outputNodeId: number, label: string) {
   if (inputNodeId !== outputNodeId && !hasAlreadyAnInputLink(inputNodeId)) {
-    console.log("Linking", inputNodeId, outputNodeId);
     const finalLink = createLink(0, 0, 0, 0);
     document.body.appendChild(finalLink);
-    const outputNode = document.getElementById(`outputLink${outputNodeId}`);
-    const inputNode = document.getElementById(`inputLink${inputNodeId}`);
+    const outputNode = document.getElementById(`${label}${outputNodeId}`);
+    const inputNode = document.getElementById(`input${inputNodeId}`);
     if (!outputNode || !inputNode) {
       console.log("Node not found");
+      console.log(outputNode, inputNode);
       return;
     }
     updateLink(
@@ -272,7 +276,7 @@ function linkTwoNode(inputNodeId: number, outputNodeId: number) {
       outputNodeId: outputNodeId,
       inputNodeId: inputNodeId,
       htmlDivElem: finalLink,
-      label: "",
+      label: label,
     });
   }
 }
@@ -292,9 +296,10 @@ function createLink(x1: number, y1: number, x2: number, y2: number) {
 function updateLinkWhenNodeMoved(nodeId: number, x: number, y: number) {
   linksBetweenNodes.value.forEach((link) => {
     const divElem = link.htmlDivElem;
+    const label = link.label;
     if (link.inputNodeId === nodeId) {
-      const outputNode = document.getElementById(`outputLink${link.outputNodeId}`);
-      const inputNode = document.getElementById(`inputLink${link.inputNodeId}`);
+      const outputNode = document.getElementById(`${label}${link.outputNodeId}`);
+      const inputNode = document.getElementById(`input${link.inputNodeId}`);
       if (outputNode && inputNode) {
         updateLink(
           divElem,
@@ -305,8 +310,8 @@ function updateLinkWhenNodeMoved(nodeId: number, x: number, y: number) {
         );
       }
     } else if (link.outputNodeId === nodeId) {
-      const inputNode = document.getElementById(`inputLink${link.inputNodeId}`);
-      const outputNode = document.getElementById(`outputLink${link.outputNodeId}`);
+      const inputNode = document.getElementById(`input${link.inputNodeId}`);
+      const outputNode = document.getElementById(`${label}${link.outputNodeId}`);
       if (inputNode && outputNode) {
         updateLink(
           divElem,
@@ -329,8 +334,7 @@ function updateLinkWhenNodeMoved(nodeId: number, x: number, y: number) {
       v-for="(node, index) in nodesElements"
       :key="index"
       :id="node.id"
-      :name="node.name"
-      :logoLink="node.logoLink"
+      :node-id="node.nodeId"
       @link-node="linkNode"
       @drop-link-on-node="dropLinkOnNode"
       @move-node="updateLinkWhenNodeMoved"

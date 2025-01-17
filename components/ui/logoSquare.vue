@@ -1,15 +1,15 @@
 <script setup lang="ts">
-  interface LogoSquareProps {
-    serviceName: string,
-    pos: number,
-    max: number
-  }
+interface LogoSquareProps {
+  serviceName: string;
+  pos: number;
+  max: number;
+}
 
-  const props = withDefaults(defineProps<LogoSquareProps>(), {
-    serviceName: '',
-    pos: 0,
-    max: 0
-  });
+const props = withDefaults(defineProps<LogoSquareProps>(), {
+  serviceName: "",
+  pos: 0,
+  max: 0,
+});
 
   const serviceStore = useServiceStore();
   const service = ref();
@@ -37,7 +37,7 @@
     :style="{ backgroundColor: serviceStore.getServiceWithId(props.serviceName).color }"
     :class="(props.pos === 0 ? 'rounded-l-sm ' : ' ') + (props.pos === props.max - 1 ? 'rounded-r-sm ' : ' ')"
   >
-    <div v-html="logoResponse" :alt="serviceStore.getServiceWithId(props.serviceName).name + ' logo'"></div>
+    <div v-html="logoResponse" class="w-full h-full flex justify-center items-center" :alt="serviceStore.getServiceWithId(props.serviceName).name + ' logo'"></div>
   </div>
 
   <div v-else class="flex h-10 aspect-square items-center justify-center bg-white">

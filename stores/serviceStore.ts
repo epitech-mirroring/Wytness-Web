@@ -87,6 +87,12 @@ export const useServiceStore = defineStore("services", () => {
     return service;
   }
 
+  function getServiceFromNode(nodeId: number) {
+    return services.value.find((service) =>
+      service.nodes.some((node) => node.id === nodeId),
+    );
+  }
+
   async function connectService(serviceId: string) {
     const connection = connections.value.find(
       (connection) => connection.serviceId === serviceId,
@@ -145,6 +151,25 @@ export const useServiceStore = defineStore("services", () => {
     return node?.name;
   }
 
+  async function getNode(nodeId: number) {
+    if (services.value.length === 0) {
+      await fetchServices();
+      await fetchServicesNodes();
+    }
+    if (services.value.length === 0) {
+      return undefined;
+    }
+    if (services.value[0].nodes === undefined) {
+      await fetchServicesNodes();
+    }
+    if (services.value[0].nodes === undefined) {
+      return undefined;
+    }
+    return services.value
+      .flatMap((service) => service.nodes)
+      .find((node) => node.id === nodeId);
+  }
+
   function getNumberOfConnectedServices() {
     return connections.value.filter((connection) => connection.connected)
       .length;
@@ -162,10 +187,12 @@ export const useServiceStore = defineStore("services", () => {
     connections,
     fetchConnections,
     getServiceWithId,
+    getServiceFromNode,
     connectService,
     disconnectService,
     postConnection,
     getNodeName,
+    getNode,
     getNumberOfConnectedServices,
     clear,
   };

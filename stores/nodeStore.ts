@@ -74,6 +74,24 @@ export const useNodeStore = defineStore("nodes", () => {
         return await response.json();
     }
 
+    async function createNode(workflowId: number, nodeId: number, position: { x: number; y: number }) {
+        const backend = useBackend();
+
+        const response = await backend.authFetch(`/workflows/${workflowId}/nodes`, {
+            method: "POST",
+            body: JSON.stringify({ id: nodeId, position, config: {} }),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error("Failed to create node");
+        }
+
+        return await response.json();
+    }
+
     function clear() {
         usedLabels.value = {};
     }
@@ -83,6 +101,7 @@ export const useNodeStore = defineStore("nodes", () => {
         getUsedLabels,
         getUsedLabelsValue,
         updateNodePosition,
+        createNode,
         removeNodePreviousLink,
         addNodePreviousLink,
         clear,

@@ -6,10 +6,10 @@ interface NodeCardProps {
   id: number,
   nodeId: number,
   x: number,
-  y: number
+  y: number,
 }
 
-const emit = defineEmits(['linkNode', 'dropLinkOnNode', 'moveNode', 'unlinkNode']);
+const emit = defineEmits(['linkNode', 'dropLinkOnNode', 'moveNode', 'unlinkNode', 'drop']);
 
 const props = withDefaults(defineProps<NodeCardProps>(), {
   id: 0,
@@ -21,6 +21,7 @@ const props = withDefaults(defineProps<NodeCardProps>(), {
 const node = ref<ListNode>({} as ListNode);
 const service = ref<ListService>({} as ListService);
 const serviceStore = useServiceStore();
+const nodeStore = useNodeStore();
 
 const x = ref(props.x);
 const y = ref(props.y);
@@ -45,6 +46,7 @@ function drag(event: MouseEvent) {
 function drop(event: MouseEvent) {
   window.removeEventListener("mousemove", move);
   window.removeEventListener("mouseup", drop);
+  emit('drop', props.id, x.value, y.value);
 }
 
 function move(event: MouseEvent) {
@@ -79,7 +81,6 @@ function dropLinkOnNode(event: MouseEvent) {
   }
   emit('dropLinkOnNode', props.id, inputLink.getBoundingClientRect().left + inputLink.getBoundingClientRect().width / 2, inputLink.getBoundingClientRect().top + inputLink.getBoundingClientRect().height / 2);
 }
-
 </script>
 
 <template>
@@ -108,7 +109,10 @@ function dropLinkOnNode(event: MouseEvent) {
       @mousedown="(event) => linkNode(event, node.labels[0])"
       :id="node.labels[0] + props.id"
     >
-      <div class="bg-primary rounded-full h-3 aspect-square"></div>
+      <div
+        class="rounded-full h-3 aspect-square"
+        :style="{ backgroundColor: nodeStore.getUsedLabelsValue(props.id, node.labels[0]) ? '#574AE2' : '#9593AE' }"
+      ></div>
     </div>
 
     <div
@@ -117,7 +121,10 @@ function dropLinkOnNode(event: MouseEvent) {
       @mousedown="(event) => linkNode(event, node.labels[1])"
       :id="node.labels[1] + props.id"
     >
-      <div class="bg-primary rounded-full h-3 aspect-square"></div>
+      <div
+        class="rounded-full h-3 aspect-square"
+        :style="{ backgroundColor: nodeStore.getUsedLabelsValue(props.id, node.labels[1]) ? '#574AE2' : '#9593AE' }"
+      ></div>
     </div>
 
 
@@ -135,7 +142,7 @@ function dropLinkOnNode(event: MouseEvent) {
       <g filter="url(#filter0_d_79_4862)">
         <path d="M29 14.0359C31.6667 15.5755 31.6667 19.4245 29 20.9641L14.75 29.1913C12.0833 30.7309 8.75 28.8064 8.75 25.7272V9.27275C8.75 6.19355 12.0833 4.26906 14.75 5.80866L29 14.0359Z" fill="white"/>
       </g>
-      <path d="M26 15.7679C27.3333 16.5377 27.3333 18.4623 26 19.2321L14.75 25.7272C13.4167 26.497 11.75 25.5348 11.75 23.9952V11.0048C11.75 9.46521 13.4167 8.50296 14.75 9.27276L26 15.7679Z" fill="#574AE2"/>
+      <path d="M26 15.7679C27.3333 16.5377 27.3333 18.4623 26 19.2321L14.75 25.7272C13.4167 26.497 11.75 25.5348 11.75 23.9952V11.0048C11.75 9.46521 13.4167 8.50296 14.75 9.27276L26 15.7679Z" :fill="nodeStore.getUsedLabelsValue(props.id, 'input') ? '#574AE2' : '#9593AE'"/>
       <defs>
         <filter id="filter0_d_79_4862" x="4.75" y="3.26679" width="30.25" height="32.4664" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
           <feFlood flood-opacity="0" result="BackgroundImageFix"/>

@@ -361,7 +361,7 @@ async function saveNodeNewPosition(nodeId: number, x: number, y: number) {
 
   </div>
 
-  <div class="flex items-center gap-5 bg-white border border-navbar-border absolute bottom-14	inset-x-2/4 -translate-x-2/4 py-2 px-2.5 w-52 rounded-full">
+  <div class="flex items-center gap-5 bg-white border border-navbar-border fixed bottom-14	inset-x-2/4 -translate-x-2/4 py-2 px-2.5 w-52 rounded-full">
     <div class="flex justify-between items-center w-full">
       <i class="fa-regular fa-gauge-simple-min fa-lg cursor-pointer"></i>
       <i class="fa-regular fa-gear fa-lg cursor-pointer"></i>

@@ -10,7 +10,7 @@
 
 <template>
     <div class="flex flex-col h-screen w-screen">
-      <DashboardTopBar :add-logo="true" />
+      <DashboardTopBar :add-logo="true" class="fixed"/>
       <main class="h-full w-full">
         <slot />
       </main>

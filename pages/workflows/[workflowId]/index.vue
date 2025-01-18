@@ -385,8 +385,8 @@ async function saveNodeNewPosition(nodeId: number, x: number, y: number) {
     </div>
 
   <DropdownMenu>
-    <DropdownMenuTrigger as-child>
-      <div class="flex rounded-full bg-primary hover:bg-primary/90 text-white h-8 aspect-square items-center justify-center cursor-pointer">
+    <DropdownMenuTrigger as-child class="flex rounded-full bg-primary hover:bg-primary/90 text-white h-8 aspect-square items-center justify-center cursor-pointer plus-button">
+      <div>
         <span class="text-2xl select-none">+</span>
       </div>
     </DropdownMenuTrigger>
@@ -469,5 +469,9 @@ async function saveNodeNewPosition(nodeId: number, x: number, y: number) {
 
   .content {
     direction: ltr;
+  }
+
+  .plus-button {
+    box-shadow: 0px 4px 5.7px 0px rgba(127, 117, 232, 0.77);
   }
 </style>

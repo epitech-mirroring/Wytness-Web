@@ -1,26 +1,7 @@
 <script setup lang="ts">
-import { ref, computed, onUnmounted } from "vue";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { ref, onUnmounted, onMounted } from "vue";
 import NodeCard from "~/components/ui/NodeCard.vue";
-import { node } from "@unovis/ts/components/sankey/style";
-import { set } from "zod";
+
 
 definePageMeta({
     title: "Workflow",
@@ -32,52 +13,53 @@ definePageMeta({
 const workflowId = parseInt(useRoute().params.workflowId as string);
 const workflowStore = useWorkflowStore();
 const serviceStore = useServiceStore();
+const nodeStore = useNodeStore();
 const workflowNodes = ref<WorkflowNode[]>([]);
-// const triggerConfig = ref("{}");
-// const workflow = computed(() => workflowStore.getWorkflow(workflowId));
 
 onMounted(async () => {
   await workflowStore.fetchWorkflows();
   await serviceStore.fetchServices();
+  await synchronizeWorkflow();
+});
+
+function resetWorkflow() {
+  links.value.forEach((link) => {
+    link.remove();
+  });
+  linksBetweenNodes.value.forEach((link) => {
+    link.htmlDivElem.remove();
+  });
+  links.value = [];
+  workflowNodes.value = [];
+  nodesElements.value = [];
+  linksBetweenNodes.value = [];
+  nodeStore.clear();
+}
+
+async function synchronizeWorkflow() {
+  if (workflowNodes.value.length > 0) {
+    resetWorkflow();
+  }
   try {
-  workflowNodes.value = await workflowStore.fetchWorkflowNodes(workflowId);
+    workflowNodes.value = await workflowStore.fetchWorkflowNodes(workflowId);
   } catch (e) {
     console.log(e);
   }
-  console.log(workflowNodes.value);
   workflowNodes.value.forEach((node) => {
     addNewWorkflowNodeElement(node);
   });
   setTimeout(() => {
-  workflowNodes.value.forEach((node) => {
-    addLinkBetweenWorkflowNodes(node);
-  });
-  }, 1000);
-  console.log(nodesElements.value);
-  console.log(linksBetweenNodes.value);
-});
-
-// // Watch workflow changes
-// watch(workflow, (workflow) => {
-//   if (workflow) {
-//     triggerConfig.value = JSON.stringify(
-//       workflow.entrypoints[0].config,
-//       null,
-//       2,
-//     );
-//   }
-// });
-
-// const addNewAction = () => {};
-
-// const updateSelectedAction = (index, action) => {};
-
-// const removeAction = (index) => {};
+    workflowNodes.value.forEach((node) => {
+      addLinkBetweenWorkflowNodes(node);
+    });
+  }, 200);
+}
 
 interface Node {
   id: number;
   nodeId: number;
   config: unknown;
+  position: { x: number; y: number };
 }
 
 interface Link {
@@ -91,17 +73,22 @@ const nodesElements = ref<Node[]>([
 ]);
 
 function addNewWorkflowNodeElement(workflowNode : WorkflowNode) {
+  nodeStore.usedLabels[workflowNode.id] = {};
+  workflowNode.next.map((nextNode) => {
+    nodeStore.usedLabels[workflowNode.id][nextNode.label] = false;
+  });
+  nodeStore.usedLabels[workflowNode.id]["input"] = false;
   nodesElements.value.push({
     id: workflowNode.id,
     nodeId: workflowNode.nodeId,
     config: workflowNode.config,
+    position: { x: workflowNode.position.x, y: workflowNode.position.y },
   });
   workflowNode.next.forEach((nextNode) => {
     nextNode.next.forEach((nextNode) => {
       addNewWorkflowNodeElement(nextNode);
     });
   });
-  console.log(nodesElements.value);
 }
 
 function addLinkBetweenWorkflowNodes(workflowNode : WorkflowNode) {
@@ -109,7 +96,6 @@ function addLinkBetweenWorkflowNodes(workflowNode : WorkflowNode) {
   workflowNode.next.forEach((nextNode) => {
     const label = nextNode.label;
     nextNode.next.forEach((nextNode) => {
-      console.log("Try to link", workflowId, nextNode.id);
       linkTwoNode(nextNode.id, workflowId, label);
       addLinkBetweenWorkflowNodes(nextNode);
     });
@@ -141,12 +127,15 @@ onUnmounted(() => {
   linksBetweenNodes.value.forEach((link) => {
     link.htmlDivElem.remove();
   });
+  nodeStore.clear();
 });
 
 function unlinkNode(nodeId: number) {
   const link = linksBetweenNodes.value.find((link) => link.inputNodeId === nodeId);
   if (link) {
     link.htmlDivElem.remove();
+    nodeStore.usedLabels[link.outputNodeId][link.label] = false;
+    nodeStore.usedLabels[link.inputNodeId]["input"] = false;
   }
   linksBetweenNodes.value = linksBetweenNodes.value.filter((link) => link.inputNodeId !== nodeId);
 }
@@ -243,6 +232,8 @@ function dropLinkOnNode(nodeId: number, x: number, y: number) {
       htmlDivElem: finalLink,
       label: currentLabel.value,
     });
+    nodeStore.usedLabels[nodeId]["input"] = true;
+    nodeStore.usedLabels[currentLinkingNodeId.value][currentLabel.value] = true;
   }
   lastLink.remove();
   links.value.pop();
@@ -260,16 +251,14 @@ function linkTwoNode(inputNodeId: number, outputNodeId: number, label: string) {
     const outputNode = document.getElementById(`${label}${outputNodeId}`);
     const inputNode = document.getElementById(`input${inputNodeId}`);
     if (!outputNode || !inputNode) {
-      console.log("Node not found");
-      console.log(outputNode, inputNode);
       return;
     }
     updateLink(
       finalLink,
-      outputNode.getBoundingClientRect().left + outputNode.getBoundingClientRect().width / 2,
-      outputNode.getBoundingClientRect().top + outputNode.getBoundingClientRect().height / 2,
       inputNode.getBoundingClientRect().left + inputNode.getBoundingClientRect().width / 2,
-      inputNode.getBoundingClientRect().top + inputNode.getBoundingClientRect().height / 2
+      inputNode.getBoundingClientRect().top + inputNode.getBoundingClientRect().height / 2,
+      outputNode.getBoundingClientRect().left + outputNode.getBoundingClientRect().width / 2,
+      outputNode.getBoundingClientRect().top + outputNode.getBoundingClientRect().height / 2
     );
 
     linksBetweenNodes.value.push({
@@ -278,6 +267,8 @@ function linkTwoNode(inputNodeId: number, outputNodeId: number, label: string) {
       htmlDivElem: finalLink,
       label: label,
     });
+    nodeStore.usedLabels[inputNodeId]["input"] = true;
+    nodeStore.usedLabels[outputNodeId][label] = true;
   }
 }
 
@@ -325,6 +316,15 @@ function updateLinkWhenNodeMoved(nodeId: number, x: number, y: number) {
   });
 }
 
+async function saveNodeNewPosition(nodeId: number, x: number, y: number) {
+  try {
+    await nodeStore.updateNodePosition(workflowId, nodeId, { x: x, y: y });
+  } catch (e) {
+    console.log(e);
+    await synchronizeWorkflow();
+  }
+}
+
 </script>
 
 <template>
@@ -335,10 +335,13 @@ function updateLinkWhenNodeMoved(nodeId: number, x: number, y: number) {
       :key="index"
       :id="node.id"
       :node-id="node.nodeId"
+      :x="node.position.x"
+      :y="node.position.y"
       @link-node="linkNode"
       @drop-link-on-node="dropLinkOnNode"
       @move-node="updateLinkWhenNodeMoved"
       @unlink-node="unlinkNode"
+      @drop="saveNodeNewPosition"
     />
 
   </div>
@@ -350,7 +353,7 @@ function updateLinkWhenNodeMoved(nodeId: number, x: number, y: number) {
       <i class="fa-regular fa-broom fa-lg cursor-pointer"></i>
     </div>
 
-    <div class="flex rounded-full bg-primary hover:bg-primary/90 text-white h-8 aspect-square items-center justify-center cursor-pointer" @click="addNewNodeElement(0, {})">
+    <div class="flex rounded-full bg-primary hover:bg-primary/90 text-white h-8 aspect-square items-center justify-center cursor-pointer" @click="">
       <span class="text-2xl select-none">+</span>
     </div>
 

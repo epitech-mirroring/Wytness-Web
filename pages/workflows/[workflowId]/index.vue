@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { ref, onUnmounted, onMounted } from "vue";
+import LogoSVG from "~/components/ui/LogoSVG.vue";
 import NodeCard from "~/components/ui/NodeCard.vue";
+import NodeCardSimplified from "~/components/ui/NodeCardSimplified.vue";
+import { ScrollArea } from "~/components/ui/scroll-area";
 
 
 definePageMeta({
@@ -20,6 +23,11 @@ onMounted(async () => {
   await workflowStore.fetchWorkflows();
   await serviceStore.fetchServices();
   await synchronizeWorkflow();
+  const background = document.getElementById("background");
+  if (background) {
+    maxNodeX.value = background.getBoundingClientRect().width;
+    maxNodeY.value = background.getBoundingClientRect().height;
+  }
 });
 
 function resetWorkflow() {
@@ -102,14 +110,17 @@ function addLinkBetweenWorkflowNodes(workflowNode : WorkflowNode) {
   });
 }
 
-// const addNewNodeElement = (id: number, config: unknown) => {
-//   nodesElements.value.push({
-//     id: id,
-//     name: "This is a Node",
-//     logoLink: "https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg",
-//     config: config,
-//   });
-// };
+async function addNewNodeElement(id: number) {
+  try {
+    const node = await nodeStore.createNode(workflowId, id, { x: 100, y: 100 });
+    if (node) {
+      addNewWorkflowNodeElement(node);
+    }
+  } catch (e) {
+    console.log(e);
+    await synchronizeWorkflow();
+  }
+}
 
 const linksBetweenNodes = ref<Link[]>([]);
 
@@ -117,6 +128,9 @@ const isLinking = ref(false);
 const currentLinkingNodePosition = ref({ x: 0, y: 0 });
 const currentLinkingNodeId = ref(0);
 const currentLabel = ref("");
+
+const maxNodeX = ref(100);
+const maxNodeY = ref(100);
 
 const links = ref<HTMLDivElement[]>([]);
 
@@ -343,7 +357,7 @@ async function saveNodeNewPosition(nodeId: number, x: number, y: number) {
 </script>
 
 <template>
-  <div class="h-full w-full bg-[url('/assets/images/background_item.svg')] bg-repeat bg-[length:20px_20px]">
+  <div id="background" class="h-full w-full bg-[url('/assets/images/background_item.svg')] bg-repeat bg-[length:20px_20px]">
 
     <NodeCard
       v-for="(node, index) in nodesElements"
@@ -352,6 +366,8 @@ async function saveNodeNewPosition(nodeId: number, x: number, y: number) {
       :node-id="node.nodeId"
       :x="node.position.x"
       :y="node.position.y"
+      :max-x="maxNodeX"
+      :max-y="maxNodeY"
       @link-node="linkNode"
       @drop-link-on-node="dropLinkOnNode"
       @move-node="updateLinkWhenNodeMoved"
@@ -368,9 +384,90 @@ async function saveNodeNewPosition(nodeId: number, x: number, y: number) {
       <i class="fa-regular fa-broom fa-lg cursor-pointer"></i>
     </div>
 
-    <div class="flex rounded-full bg-primary hover:bg-primary/90 text-white h-8 aspect-square items-center justify-center cursor-pointer" @click="">
-      <span class="text-2xl select-none">+</span>
-    </div>
+  <DropdownMenu>
+    <DropdownMenuTrigger as-child>
+      <div class="flex rounded-full bg-primary hover:bg-primary/90 text-white h-8 aspect-square items-center justify-center cursor-pointer">
+        <span class="text-2xl select-none">+</span>
+      </div>
+    </DropdownMenuTrigger>
+    <DropdownMenuContent class="w-72 h-120">
+      <DropdownMenuLabel>My Account</DropdownMenuLabel>
+      <DropdownMenuSeparator class="mb-2" />
+      <ScrollArea dir="rtl" class="h-[90%] flex flex-col pl-3">
+        <div
+          v-for="(service, index) in serviceStore.services"
+          class="flex flex-col gap-1 items-stretch content pb-2.5"
+        >
 
+          <div class="flex gap-1.5 font-medium">
+            <div class="">
+              <LogoSVG
+                :serviceName="service.name"
+                :logoUrl="service.logo"
+                :color="service.color"
+                :width="20"
+                :height="20"
+              />
+            </div>
+            <span>{{ service.name.charAt(0).toUpperCase() + service.name.slice(1) }}</span>
+          </div>
+
+          <div
+            v-if ="service.nodes.filter((node) => node.type === 'action').length > 0"
+            class="flex flex-col gap-1 items-stretch"
+          >
+            <span class="text-xs text-text-muted font-medium">Actions</span>
+              <ScrollArea class="flex gap-1.5">
+                <div class="flex gap-1.5 pb-2">
+                  <NodeCardSimplified
+                    v-for="(node, index) in service.nodes.filter((node) => node.type === 'action')"
+                    :key="index"
+                    :nodeId="node.id"
+                    :nodeName="node.name"
+                    :serviceName="service.name"
+                    :serviceColor="service.color"
+                    :serviceLogo="service.logo"
+                    @click="addNewNodeElement(node.id)"
+                  ></NodeCardSimplified>
+                </div>
+                <ScrollBar orientation="horizontal" />
+              </ScrollArea >
+          </div>
+
+          <div
+            v-if ="service.nodes.filter((node) => node.type === 'trigger').length > 0"
+            class="flex flex-col gap-1 items-stretch"
+          >
+            <span class="text-xs text-text-muted font-medium">Triggers</span>
+              <ScrollArea class="flex gap-1.5">
+                <div class="flex gap-1.5 pb-2">
+                  <NodeCardSimplified
+                    v-for="(node, index) in service.nodes.filter((node) => node.type === 'trigger')"
+                    :key="index"
+                    :nodeId="node.id"
+                    :nodeName="node.name"
+                    :serviceName="service.name"
+                    :serviceColor="service.color"
+                    :serviceLogo="service.logo"
+                    @click="addNewNodeElement(node.id)"
+                  ></NodeCardSimplified>
+                </div>
+                <ScrollBar orientation="horizontal" />
+              </ScrollArea >
+          </div>
+        </div>
+    </ScrollArea>
+    </DropdownMenuContent>
+  </DropdownMenu>
   </div>
 </template>
+
+<style scoped>
+  .scroll-left {
+    direction: rtl;
+  }
+
+  .content {
+    direction: ltr;
+  }
+</style>

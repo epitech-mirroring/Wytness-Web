@@ -130,14 +130,20 @@ onUnmounted(() => {
   nodeStore.clear();
 });
 
-function unlinkNode(nodeId: number) {
+async function unlinkNode(nodeId: number) {
   const link = linksBetweenNodes.value.find((link) => link.inputNodeId === nodeId);
+  linksBetweenNodes.value = linksBetweenNodes.value.filter((link) => link.inputNodeId !== nodeId);
   if (link) {
     link.htmlDivElem.remove();
     nodeStore.usedLabels[link.outputNodeId][link.label] = false;
     nodeStore.usedLabels[link.inputNodeId]["input"] = false;
+    try {
+      await nodeStore.removeNodePreviousLink(workflowId, link.inputNodeId);
+    } catch (e) {
+      console.log(e);
+      await synchronizeWorkflow();
+    }
   }
-  linksBetweenNodes.value = linksBetweenNodes.value.filter((link) => link.inputNodeId !== nodeId);
 }
 
 function linkNode(nodeId: number, label: string, x: number, y: number) {
@@ -216,7 +222,7 @@ function hasAlreadyAnInputLink(nodeId: number) {
   return linksBetweenNodes.value.some((link) => link.inputNodeId === nodeId);
 }
 
-function dropLinkOnNode(nodeId: number, x: number, y: number) {
+async function dropLinkOnNode(nodeId: number, x: number, y: number) {
   if (!isLinking.value) {
     return;
   }
@@ -234,6 +240,15 @@ function dropLinkOnNode(nodeId: number, x: number, y: number) {
     });
     nodeStore.usedLabels[nodeId]["input"] = true;
     nodeStore.usedLabels[currentLinkingNodeId.value][currentLabel.value] = true;
+    try {
+      await nodeStore.addNodePreviousLink(workflowId, nodeId, currentLinkingNodeId.value, currentLabel.value);
+    } catch (e) {
+      console.log(e);
+      window.removeEventListener("mousemove", move);
+      window.removeEventListener("mouseup", drop);
+      await synchronizeWorkflow();
+      return;
+    }
   }
   lastLink.remove();
   links.value.pop();

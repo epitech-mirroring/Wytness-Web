@@ -38,6 +38,42 @@ export const useNodeStore = defineStore("nodes", () => {
         return await response.json();
     }
 
+    async function removeNodePreviousLink(workflowId: number, nodeId: number) {
+        const backend = useBackend();
+
+        const response = await backend.authFetch(`/workflows/${workflowId}/nodes/${nodeId}`, {
+            method: "PATCH",
+            body: JSON.stringify({ previous: null }),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error("Failed to remove node previous link");
+        }
+
+        return await response.json();
+    }
+
+    async function addNodePreviousLink(workflowId: number, nodeId: number, previousNodeId: number, label: string) {
+        const backend = useBackend();
+
+        const response = await backend.authFetch(`/workflows/${workflowId}/nodes/${nodeId}`, {
+            method: "PATCH",
+            body: JSON.stringify({ previous: previousNodeId, label }),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error("Failed to add node previous link");
+        }
+
+        return await response.json();
+    }
+
     function clear() {
         usedLabels.value = {};
     }
@@ -47,6 +83,8 @@ export const useNodeStore = defineStore("nodes", () => {
         getUsedLabels,
         getUsedLabelsValue,
         updateNodePosition,
+        removeNodePreviousLink,
+        addNodePreviousLink,
         clear,
     };
 });

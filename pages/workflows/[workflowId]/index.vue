@@ -22,6 +22,7 @@ const workflowNodes = ref<WorkflowNode[]>([]);
 onMounted(async () => {
   await workflowStore.fetchWorkflows();
   await serviceStore.fetchServices();
+  await serviceStore.fetchServicesNodes();
   await synchronizeWorkflow();
   const background = document.getElementById("background");
   if (background) {
@@ -395,65 +396,66 @@ async function saveNodeNewPosition(nodeId: number, x: number, y: number) {
       <DropdownMenuSeparator class="mb-2" />
       <ScrollArea dir="rtl" class="h-[90%] flex flex-col pl-3">
         <div
-          v-for="(service, index) in serviceStore.services"
+          v-for="(service) in serviceStore.services"
           class="flex flex-col gap-1 items-stretch content pb-2.5"
         >
-
-          <div class="flex gap-1.5 font-medium">
-            <div class="">
-              <LogoSVG
-                :serviceName="service.name"
-                :logoUrl="service.logo"
-                :color="service.color"
-                :width="20"
-                :height="20"
-              />
+          <div v-if="service.nodes && service.nodes.length > 0">
+            <div class="flex gap-1.5 font-medium">
+              <div class="">
+                <LogoSVG
+                  :serviceName="service.name"
+                  :logoUrl="service.logo"
+                  :color="service.color"
+                  :width="20"
+                  :height="20"
+                />
+              </div>
+              <span>{{ service.name.charAt(0).toUpperCase() + service.name.slice(1) }}</span>
             </div>
-            <span>{{ service.name.charAt(0).toUpperCase() + service.name.slice(1) }}</span>
-          </div>
 
-          <div
-            v-if ="service.nodes.filter((node) => node.type === 'action').length > 0"
-            class="flex flex-col gap-1 items-stretch"
-          >
-            <span class="text-xs text-text-muted font-medium">Actions</span>
-              <ScrollArea class="flex gap-1.5">
-                <div class="flex gap-1.5 pb-2">
-                  <NodeCardSimplified
-                    v-for="(node, index) in service.nodes.filter((node) => node.type === 'action')"
-                    :key="index"
-                    :nodeId="node.id"
-                    :nodeName="node.name"
-                    :serviceName="service.name"
-                    :serviceColor="service.color"
-                    :serviceLogo="service.logo"
-                    @click="addNewNodeElement(node.id)"
-                  ></NodeCardSimplified>
-                </div>
-                <ScrollBar orientation="horizontal" />
-              </ScrollArea >
-          </div>
+            <div
+              v-if ="service.nodes.filter((node) => node.type === 'action').length > 0"
+              class="flex flex-col gap-1 items-stretch"
+            >
+              <span class="text-xs text-text-muted font-medium">Actions</span>
+                <ScrollArea class="flex gap-1.5">
+                  <div class="flex gap-1.5 pb-2">
+                    <NodeCardSimplified
+                      v-for="(node, index) in service.nodes.filter((node) => node.type === 'action')"
+                      :key="index"
+                      :nodeId="node.id"
+                      :nodeName="node.name"
+                      :serviceName="service.name"
+                      :serviceColor="service.color"
+                      :serviceLogo="service.logo"
+                      @click="addNewNodeElement(node.id)"
+                    ></NodeCardSimplified>
+                  </div>
+                  <ScrollBar orientation="horizontal" />
+                </ScrollArea >
+            </div>
 
-          <div
-            v-if ="service.nodes.filter((node) => node.type === 'trigger').length > 0"
-            class="flex flex-col gap-1 items-stretch"
-          >
-            <span class="text-xs text-text-muted font-medium">Triggers</span>
-              <ScrollArea class="flex gap-1.5">
-                <div class="flex gap-1.5 pb-2">
-                  <NodeCardSimplified
-                    v-for="(node, index) in service.nodes.filter((node) => node.type === 'trigger')"
-                    :key="index"
-                    :nodeId="node.id"
-                    :nodeName="node.name"
-                    :serviceName="service.name"
-                    :serviceColor="service.color"
-                    :serviceLogo="service.logo"
-                    @click="addNewNodeElement(node.id)"
-                  ></NodeCardSimplified>
-                </div>
-                <ScrollBar orientation="horizontal" />
-              </ScrollArea >
+            <div
+              v-if ="service.nodes.filter((node) => node.type === 'trigger').length > 0"
+              class="flex flex-col gap-1 items-stretch"
+            >
+              <span class="text-xs text-text-muted font-medium">Triggers</span>
+                <ScrollArea class="flex gap-1.5">
+                  <div class="flex gap-1.5 pb-2">
+                    <NodeCardSimplified
+                      v-for="(node, index) in service.nodes.filter((node) => node.type === 'trigger')"
+                      :key="index"
+                      :nodeId="node.id"
+                      :nodeName="node.name"
+                      :serviceName="service.name"
+                      :serviceColor="service.color"
+                      :serviceLogo="service.logo"
+                      @click="addNewNodeElement(node.id)"
+                    ></NodeCardSimplified>
+                  </div>
+                  <ScrollBar orientation="horizontal" />
+                </ScrollArea >
+            </div>
           </div>
         </div>
     </ScrollArea>

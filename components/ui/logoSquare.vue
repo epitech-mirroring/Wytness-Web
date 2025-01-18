@@ -34,7 +34,7 @@ const props = withDefaults(defineProps<LogoSquareProps>(), {
   <div
     v-if="props.serviceName !== ''"
     class="flex h-10 aspect-square items-center justify-center"
-    :style="{ backgroundColor: serviceStore.getServiceWithId(props.serviceName).color }"
+    :style="{ backgroundColor: serviceStore.getServiceWithId(props.serviceName).color === '#FFFFFF' ? '#F0EAEE' : serviceStore.getServiceWithId(props.serviceName).color }"
     :class="(props.pos === 0 ? 'rounded-l-sm ' : ' ') + (props.pos === props.max - 1 ? 'rounded-r-sm ' : ' ')"
   >
     <div v-html="logoResponse" class="w-full h-full flex justify-center items-center" :alt="serviceStore.getServiceWithId(props.serviceName).name + ' logo'"></div>

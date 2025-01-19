@@ -1,5 +1,5 @@
 import type { Auth } from "@firebase/auth";
-import { onAuthStateChanged } from "@firebase/auth";
+import { onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from "@firebase/auth";
 import { useBackend } from "#imports";
 
 export type User = {
@@ -25,6 +25,7 @@ export const useAuthState = () => {
     onAuthStateChanged($firebaseAuth, async (firebaseUser) => {
       if (firebaseUser) {
         const backend = useBackend();
+        await backend.synchronize();
         user.value = await backend
           .authFetch("/users/me", {
             method: "GET",
@@ -55,5 +56,18 @@ export const useAuthState = () => {
     statisticStore.clear();
   };
 
-  return { user, logout };
+  async function googleAuth() {
+    const googleProvider = new GoogleAuthProvider();
+    return await signInWithPopup($firebaseAuth, googleProvider)
+      .then(async (result) => {})
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  return {
+    user,
+    logout,
+    googleAuth,
+  };
 };

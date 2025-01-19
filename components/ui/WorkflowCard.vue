@@ -53,8 +53,10 @@
 
 <template>
   <div
+    tabindex="0"
     class="flex p-5 pr-8 max-[830px]:p-3 self-stretch items-center rounded-lg border border-navbar-border cursor-pointer shadow justify-between hover:shadow-lg"
     @click="editWorkflow"
+    @keydown.enter="editWorkflow"
     >
     <div class="flex gap-2.5 items-center">
       <div class="flex max-[820px]:hidden" >
@@ -101,7 +103,13 @@
     </div>
 
     <div class="flex gap-2.5 items-center">
-      <SwitchSquare v-model="props.active" :defaultChecked="props.active" class="h-6 w-11" @update:checked="activateWorkflow" />
+      <SwitchSquare
+        v-model="props.active"
+        :defaultChecked="props.active"
+        class="h-6 w-11"
+        @update:checked="activateWorkflow"
+        @keydown.space="activateWorkflow"
+        aria-label="Workflow Activation"/>
       <i class="fa-regular fa-triangle-exclamation text-navbar-border" :class="{ 'text-warning': props.problems}"></i>
     </div>
   </div>

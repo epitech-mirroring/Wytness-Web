@@ -118,7 +118,7 @@
 
     <div class="flex w-full h-full flex-col p-4 gap-2.5 border border-navabar-border rounded-xl shadow-md">
       <div>
-        <button @click="toogleWorflowDiv" class="flex gap-2.5 items-center">
+        <button @click="toogleWorflowDiv" class="flex gap-2.5 items-center" tabindex="0">
           <i id="chevron" class="fa-solid fa-chevron-down"></i>
           <span class="font-bold">Recent workflows</span>
         </button>

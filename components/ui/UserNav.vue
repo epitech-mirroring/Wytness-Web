@@ -42,8 +42,13 @@ const authState = useAuthState();
         </div>
       </DropdownMenuLabel>
       <DropdownMenuSeparator />
-      <DropdownMenuItem class="focus:bg-navbar-hover-background" @click="authState.logout()">
-        Log out
+      <DropdownMenuItem
+        class="focus:bg-navbar-hover-background"
+        @click="authState.logout()"
+        @keydown.enter="authState.logout()"
+        @keydown.space="authState.logout()"
+        >
+        <span>Log out</span>
         <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
       </DropdownMenuItem>
     </DropdownMenuContent>

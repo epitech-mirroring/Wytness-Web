@@ -71,8 +71,13 @@
         </PaginationList>
       </Pagination>
     </div>
-    <div class="flex absolute rounded-full bg-primary hover:bg-primary/90 text-white bottom-6 right-6 h-16 aspect-square items-center justify-center cursor-pointer">
-      <span class="text-5xl" @click="createWorkflow">+</span>
+    <div
+      tabindex="0"
+      @click="createWorkflow"
+      @keydown.enter="createWorkflow"
+      @keydown.space="createWorkflow"
+      class="flex absolute rounded-full bg-primary hover:bg-primary/90 text-white bottom-6 right-6 h-16 aspect-square items-center justify-center cursor-pointer">
+      <span class="text-5xl">+</span>
     </div>
 
   </div>

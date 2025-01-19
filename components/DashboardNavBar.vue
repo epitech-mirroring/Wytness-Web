@@ -8,12 +8,9 @@ var currentRoute = '';
 const navbarButtons1 = ref([
   { buttonName: 'Dashboard', iconName: 'fa fa-home', selected: false, path: 'dashboard' },
   { buttonName: 'Workflows', iconName: 'far fa-arrow-progress', selected: false, path: 'workflows' },
-  { buttonName: 'Connections', iconName: 'far fa-link', selected: false, path: 'connections' },
-  { buttonName: 'Webhooks', iconName: 'far fa-globe', selected: false, path: 'webhooks' },
-  { buttonName: 'Marketplace', iconName: 'far fa-cart-shopping', selected: false, path: 'marketplace' }
+  { buttonName: 'Connections', iconName: 'far fa-link', selected: false, path: 'connections' }
 ]);
 const navbarButtons2 = ref([
-  { buttonName: 'Settings', iconName: 'far fa-gear', selected: false, path: 'settings' },
   { buttonName: 'Help & Support', iconName: 'far fa-question', selected: false, path: 'help' }
 ]);
 
@@ -54,7 +51,12 @@ const navigateTo = async (path: string) => {
 
 <template>
   <div class="flex flex-col min-w-64 pb-4 pt-2 pl-2 h-screen min-h-120 border-r-navbar-border border-r">
-    <div class="project-logo flex pr-2.5 pl-3 gap-2 self-stretch items-center cursor-pointer" @click="navigateTo('dashboard')">
+    <div  tabindex="0"
+          class="project-logo flex pr-2.5 pl-3 gap-2 self-stretch items-center cursor-pointer" 
+          @click="navigateTo('dashboard')"
+          @keydown.enter="navigateTo('dashboard')"
+          @keydown.space="navigateTo('dashboard')"
+      >
       <div class="navbar-title-logo flex flex-col py-1.5 items-center self-stretch justify-center">
         <svg width="47" height="37" viewBox="0 0 47 37" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
@@ -74,6 +76,8 @@ const navigateTo = async (path: string) => {
         :iconName="button.iconName"
         :selected="button.selected"
         @click="navigateTo(button.path)"
+        @keydown.enter="navigateTo(button.path)"
+        @keydown.space="navigateTo(button.path)"
       />
     </div>
 
@@ -84,6 +88,9 @@ const navigateTo = async (path: string) => {
         :buttonName="button.buttonName"
         :iconName="button.iconName"
         :selected="button.selected"
+        @click="navigateTo(button.path)"
+        @keydown.enter="navigateTo(button.path)"
+        @keydown.space="navigateTo(button.path)"
       />
     </div>
 

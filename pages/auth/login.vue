@@ -123,7 +123,7 @@ async function signInWithGoogle() {
                 <FormLabel class="font-[Inter]">Remember me</FormLabel>
               </FormItem>
             </FormField>
-            <a class="cursor-pointer text-slate-600 hover:text-black hover:underline font-[Inter]">Forgot password?</a>
+            <a tabindex="0" class="cursor-pointer text-slate-600 hover:text-black hover:underline font-[Inter]">Forgot password?</a>
           </div>
         </div>
         <Button type="submit" class="w-full py-6 px-4 text-sm font-[Inter] rounded-md">Sign In</Button>

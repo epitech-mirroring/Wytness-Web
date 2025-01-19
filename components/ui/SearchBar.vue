@@ -51,16 +51,18 @@ function blur() {
 
 <template>
     <div class="max-[800px]:hidden flex bg-searchbar-background items-center gap-2.5 px-2.5 py-1.5 text-navbar-inactive searchbar md:w-[300px] lg:w-[400px] rounded-md">
-      <i class="fa-solid fa-search text-searchbar-icon "></i>
-      <Input
-        id="searchbar"
-        placeholder="Search here..."
-        class="w-full border-0 bg-transparent placeholder:text-navbar-inactive !ring-transparent !ring-offset-0"
-        autocomplete="off"
-        @input="filterResults"
-        @focus="filterResults"
-        @blur="blur"
-      />
+      <div class="ms-2 flex gap-1 h-full w-full items-center text-gray-600">
+        <i class="fa-solid fa-search text-searchbar-icon "></i>
+        <Input
+          id="searchbar"
+          placeholder="Search here..."
+          class="w-full border-0 bg-transparent text-gray-600 placeholder:text-navbar-inactive !ring-transparent !ring-offset-0"
+          autocomplete="off"
+          @input="filterResults"
+          @focus="filterResults"
+          @blur="blur"
+        />
+      </div>
       <div class="flex searchbar-icon gap-1.5 h-full text-black">
         <div class="flex bg-white h-8 aspect-square items-center justify-center rounded-md font-bold leading-4 shadow-md">
           <span >⌘</span>

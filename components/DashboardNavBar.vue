@@ -11,6 +11,7 @@ const navbarButtons1 = ref([
   { buttonName: 'Connections', iconName: 'far fa-link', selected: false, path: 'connections' }
 ]);
 const navbarButtons2 = ref([
+  { buttonName: 'Tutorial', iconName: 'fa-regular fa-book-open-cover', selected: false, path: 'tutorial' },
   { buttonName: 'Help & Support', iconName: 'far fa-question', selected: false, path: 'help' }
 ]);
 

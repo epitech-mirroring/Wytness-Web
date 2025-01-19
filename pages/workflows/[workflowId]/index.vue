@@ -392,7 +392,7 @@ async function saveNodeNewPosition(nodeId: number, x: number, y: number) {
       </div>
     </DropdownMenuTrigger>
     <DropdownMenuContent class="w-72 h-120">
-      <DropdownMenuLabel>My Account</DropdownMenuLabel>
+      <DropdownMenuLabel>Create a new Node</DropdownMenuLabel>
       <DropdownMenuSeparator class="mb-2" />
       <ScrollArea dir="rtl" class="h-[90%] flex flex-col pl-3">
         <div

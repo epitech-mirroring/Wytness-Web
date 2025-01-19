@@ -1,22 +1,17 @@
 <script setup lang="ts">
 import {
   Avatar,
-  AvatarFallback,
   AvatarImage,
 } from './avatar';
 import { Button } from './button';
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from './dropdown-menu';
-import { ref } from 'vue';
-import { onMounted } from 'vue';
 
 const authState = useAuthState();
 

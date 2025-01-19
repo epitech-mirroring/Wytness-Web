@@ -13,53 +13,53 @@ servicesLength<script setup lang="ts">
   const accordionItems = [
   {
     value: 'item-1',
-    title: "1. Qu'est-ce que Wytness ?",
-    content: "Wytness est une plateforme d'automatisation permettant de connecter différentes applications et services pour automatiser des actions. Inspirée de services comme IFTTT et Zapier, Wytness vous permet de créer des scénarios où une action dans un service déclenche une réaction dans un autre."
+    title: "1. What is Wytness?",
+    content: "Wytness is an automation platform that connects different applications and services to automate actions. Inspired by services like IFTTT and Zapier, Wytness allows you to create scenarios where an action in one service triggers a reaction in another."
   },
   {
     value: 'item-2',
-    title: "2. Comment fonctionnent les Actions et REActions sur Wytness ?",
-    content: "Les Actions sont des événements ou conditions qui se produisent dans un service, comme la réception d'un message ou la création d'un fichier. Une REAction est ce qui se passe en réponse à cette Action, comme envoyer un message ou stocker un fichier. Vous pouvez configurer des AREA pour lier une Action et une REAction et automatiser ces processus."
+    title: "2. How do Actions and REActions work on Wytness?",
+    content: "Actions are events or conditions that occur in a service, such as receiving a message or creating a file. A REAction is what happens in response to this Action, such as sending a message or storing a file. You can configure AREA to link an Action and a REAction and automate these processes."
   },
   {
     value: 'item-3',
-    title: "3. Qu'est-ce qu'un Workflow dans Wytness ?",
-    content: "Un workflow est une automatisation qui consiste à relier une Action (par exemple, la réception d'un message dans Gmail) à une REAction (comme stocker une pièce jointe dans OneDrive). Vous pouvez configurer plusieurs workflows pour personnaliser vos automatisations."
+    title: "3. What is a Workflow in Wytness?",
+    content: "A workflow is an automation that connects an Action (e.g., receiving a message in Gmail) to a REAction (e.g., storing an attachment in OneDrive). You can configure multiple workflows to customize your automations."
   },
   {
     value: 'item-4',
-    title: "4. Est-ce que mes données sont sécurisées sur Wytness ?",
-    content: "Oui, la sécurité de vos données est une priorité pour nous. Nous utilisons des protocoles sécurisés pour le stockage et la transmission de vos informations. De plus, l'authentification OAuth2 vous permet de connecter vos services tiers de manière sécurisée sans avoir à partager vos informations sensibles."
+    title: "4. Are my data secure on Wytness?",
+    content: "Yes, the security of your data is a priority for us. We use secure protocols for storing and transmitting your information. Additionally, OAuth2 authentication allows you to securely connect your third-party services without sharing your sensitive information."
   },
   {
     value: 'item-5',
-    title: "5. Est-ce que Wytness est accessible pour les personnes en situation de handicap ?",
-    content: "Oui, nous avons pris soin de suivre les lignes directrices d'accessibilité afin de rendre notre plateforme utilisable par le plus grand nombre, y compris les personnes en situation de handicap. Nous encourageons l'utilisation de notre plateforme avec des outils d'assistance tels que les lecteurs d'écran."
+    title: "5. Is Wytness accessible for people with disabilities?",
+    content: "Yes, we have taken care to follow accessibility guidelines to make our platform usable by the widest possible audience, including people with disabilities. We encourage the use of our platform with assistive tools such as screen readers."
   },
   {
     value: 'item-6',
-    title: "6. Puis-je utiliser Wytness sur mon téléphone mobile ?",
-    content: "Oui, Wytness dispose d'une application disponible sur l'AppStore et le PlayStore qui vous permet de gérer vos automatisations et d'interagir avec vos services directement depuis votre téléphone."
+    title: "6. Can I use Wytness on my mobile phone?",
+    content: "Yes, Wytness has an app available on the AppStore and PlayStore that allows you to manage your automations and interact with your services directly from your phone."
   },
   {
     value: 'item-7',
-    title: "7. Que faire si un service que j'utilise n'est pas encore disponible sur Wytness ?",
-    content: "Si un service que vous utilisez n'est pas encore intégré à Wytness, nous vous encourageons à nous en faire part via notre support. Nous travaillons régulièrement à l'ajout de nouveaux services à la plateforme. Un système de MarketPlace sera mit en place prochainement, vous pourrez alors créer vos propres services."
+    title: "7. What if a service I use is not yet available on Wytness?",
+    content: "If a service you use is not yet integrated with Wytness, we encourage you to let us know via our support. We regularly work on adding new services to the platform. A Marketplace system will be implemented soon, allowing you to create your own services."
   },
   {
     value: 'item-8',
-    title: "8. Comment puis-je gérer mes automatisations sur Wytness ?",
-    content: "Vous pouvez facilement gérer vos automatisations via le tableau de bord de votre compte. Vous pouvez ajouter, modifier ou supprimer des AREA à tout moment pour personnaliser les automatisations selon vos besoins."
+    title: "8. How can I manage my automations on Wytness?",
+    content: "You can easily manage your automations via your account dashboard. You can add, modify, or delete AREA at any time to customize your automations to your needs."
   },
   {
     value: 'item-9',
-    title: "9. Comment Wytness protège-t-il ma vie privée ?",
-    content: "Nous accordons une grande importance à la confidentialité de vos informations. Toutes les données personnelles que vous partagez sont cryptées et utilisées uniquement pour les fins de l'application. Nous nous engageons à ne jamais partager vos informations sans votre consentement."
+    title: "9. How does Wytness protect my privacy?",
+    content: "We place great importance on the privacy of your information. All personal data you share is encrypted and used only for the purposes of the application. We are committed to never sharing your information without your consent."
   },
   {
     value: 'item-10',
-    title: "10. Y a-t-il une limite au nombre d'Actions ou REActions que je peux créer ?",
-    content: "Non, il n'y a pas de limite stricte au nombre d'Actions ou de REActions que vous pouvez configurer. Cependant, des limites peuvent s'appliquer en fonction des services connectés ou de votre plan d'abonnement."
+    title: "10. Is there a limit to the number of Actions or REActions I can create?",
+    content: "No, there is no strict limit to the number of Actions or REActions you can configure. However, limits may apply depending on the connected services or your subscription plan."
   }
 ]
 </script>

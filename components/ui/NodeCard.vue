@@ -1,19 +1,42 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import LogoSVG from "./LogoSVG.vue";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
+import { useToast } from '@/components/ui/toast/use-toast'
 
 interface NodeCardProps {
+  workflowId: number,
   id: number,
   nodeId: number,
   x: number,
   y: number,
   maxX: number,
   maxY: number,
+  config : unknown,
 }
 
-const emit = defineEmits(['linkNode', 'dropLinkOnNode', 'moveNode', 'unlinkNode', 'drop']);
+const emit = defineEmits(['linkNode', 'dropLinkOnNode', 'moveNode', 'unlinkNode', 'drop', 'needRefresh']);
 
 const props = withDefaults(defineProps<NodeCardProps>(), {
+  workflowId: 0,
   id: 0,
   nodeId: 0,
   x: 100,
@@ -22,10 +45,12 @@ const props = withDefaults(defineProps<NodeCardProps>(), {
   maxY: 920,
 })
 
+const { toast } = useToast();
 const node = ref<ListNode>({} as ListNode);
 const service = ref<ListService>({} as ListService);
 const serviceStore = useServiceStore();
 const nodeStore = useNodeStore();
+const dialogOpen = ref(false);
 
 const x = ref(props.x);
 const y = ref(props.y);
@@ -33,15 +58,17 @@ const newX = ref(props.x);
 const newY = ref(props.y);
 const startX = ref(0);
 const startY = ref(0);
+const didMove = ref(false);
 
 onMounted(async () => {
-  node.value = await serviceStore.getNode(props.nodeId) || {id: 0, name: 'Node', description: "This is a Node", type: NodeType.ACTION, labels: []};
+  node.value = await serviceStore.getNode(props.nodeId) || {id: 0, name: 'Node', description: "This is a Node", type: NodeType.ACTION, labels: [], fields: []};
   service.value = serviceStore.getServiceFromNode(props.nodeId) || {name: 'Service', description: "This is a Service", logo: "https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg", color: "#1ED760", nodes: [{} as ListNode], useOAuth: false};
 });
 
 function drag(event: MouseEvent) {
   startX.value = event.clientX;
   startY.value = event.clientY;
+  didMove.value = false;
 
   window.addEventListener("mousemove", move);
   window.addEventListener("mouseup", drop);
@@ -50,6 +77,11 @@ function drag(event: MouseEvent) {
 function drop(event: MouseEvent) {
   window.removeEventListener("mousemove", move);
   window.removeEventListener("mouseup", drop);
+  if (!didMove.value) {
+    dialogOpen.value = true;
+    didMove.value = false;
+    return;
+  }
   emit('drop', props.id, x.value, y.value);
 }
 
@@ -58,6 +90,7 @@ function move(event: MouseEvent) {
   newY.value = y.value + event.clientY - startY.value;
   startX.value = event.clientX;
   startY.value = event.clientY;
+  didMove.value = true;
 
   const nodeCard = document.getElementById(`node-card${props.id}`);
   if (!nodeCard) {
@@ -92,6 +125,68 @@ function dropLinkOnNode(event: MouseEvent) {
   }
   emit('dropLinkOnNode', props.id, inputLink.getBoundingClientRect().left + inputLink.getBoundingClientRect().width / 2, inputLink.getBoundingClientRect().top + inputLink.getBoundingClientRect().height / 2);
 }
+
+async function updateNodeConfig() {
+  const config : {key: string, value: string}[] = [];
+  node.value.fields.forEach((field) => {
+    const input = document.getElementById(field.name) as HTMLInputElement;
+    if (input) {
+      config.push({key: field.name, value: input.value});
+    }
+  });
+  for (const {key, value} of config) {
+    if (value === '' && node.value.fields.find((field) => field.name === key)?.nullable) {
+      config.filter((field) => field.key !== key);
+    } else if (value === '' && !node.value.fields.find((field) => field.name === key)?.nullable) {
+      toast({
+      title: 'Error',
+      description: 'Please fill all the required fields',
+      variant: 'destructive',
+      })
+      return;
+    }
+  }
+  try {
+    await nodeStore.updateNodeConfig(props.workflowId, props.id, config);
+  } catch (error) {
+    console.error(error);
+    toast({
+      title: 'Error',
+      description: 'Failed to update node configuration',
+      variant: 'destructive',
+    });
+    dialogOpen.value = false;
+    return;
+  }
+
+  dialogOpen.value = false;
+  toast({
+    title: 'Success',
+    description: 'Node configuration updated successfully',
+  });
+}
+
+async function deleteNode() {
+  try {
+    await nodeStore.deleteNode(props.workflowId, props.id);
+  } catch (error) {
+    console.error(error);
+    toast({
+      title: 'Error',
+      description: 'Failed to delete node',
+      variant: 'destructive',
+    });
+    dialogOpen.value = false;
+    return;
+  }
+  emit('needRefresh');
+  dialogOpen.value = false;
+  toast({
+    title: 'Success',
+    description: 'Node deleted successfully',
+  });
+}
+
 </script>
 
 <template>
@@ -193,6 +288,77 @@ function dropLinkOnNode(event: MouseEvent) {
       </Tooltip>
     </TooltipProvider>
   </div>
+  <Dialog :open="dialogOpen" @update:open="val => {dialogOpen = val}">
+    <DialogContent>
+      <DialogHeader>
+        <DialogTitle>
+          <div class="flex items-center gap-4">
+            <div class="h-10 w-10">
+              <LogoSVG
+                :serviceName="service.name"
+                :logoUrl="service.logo"
+                :color="service.color"
+                :width="32"
+                :height="32"
+              />
+            </div>
+            <div class="flex flex-col">
+              <span >{{ node.name }}</span>
+              <span class="text-sm font-normal text-text-muted">{{ node.description }}</span>
+            </div>
+          </div>
+        </DialogTitle>
+      </DialogHeader>
+        <DialogDescription>
+          <div class="flex flex-col gap-4 h-120 pt-2">
+            <div
+              v-for="field in node.fields"
+            >
+              <div class="flex flex-col gap-1">
+                <div class="flex pl-1">
+                  <Label for="workflow-name" class="text-sm text-text-muted">{{ field.title }}</Label>
+                  <Label for="workflow-name" class="text-sm text-red-500">{{ field.nullable ? '' : '*' }}</Label>
+                </div>
+                <Input
+                  :id="field.name"
+                  :key="field.name"
+                  type="text"
+                  :placeholder="field.description"
+                  :default-value="props.config[field.name] || ''"
+                />
+              </div>
+            </div>
+          </div>
+        </DialogDescription>
+        <DialogFooter>
+          <div class="flex w-full justify-between">
+
+            <AlertDialog>
+              <AlertDialogTrigger as-child>
+                <Button variant="destructive">Delete node</Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Delete node</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete the node and all its data.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction @click="deleteNode">Confirm</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+
+            <div class="flex gap-4">
+              <Button @click="updateNodeConfig">Update</Button>
+              <button @click="dialogOpen = false">Close</button>
+            </div>
+          </div>
+        </DialogFooter>
+      </DialogContent>
+  </Dialog>
 </template>
 
 <style scoped lang="scss">

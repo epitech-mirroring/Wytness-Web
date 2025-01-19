@@ -4,6 +4,14 @@ export type ServiceMetadata = {
   useOAuth: boolean;
 };
 
+export type Field = {
+  title: string;
+  name: string;
+  description: string;
+  type: string[];
+  nullable: boolean;
+}
+
 export type ListService = {
   name: string;
   description: string;
@@ -23,6 +31,7 @@ export type ListNode = {
   description: string;
   type: NodeType;
   labels: string[];
+  fields: Field[];
 };
 
 export type Connection = {

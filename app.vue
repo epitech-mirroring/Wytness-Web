@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Toaster from '@/components/ui/toast/Toaster.vue'
 const serviceStore = useServiceStore();
 
 const authState = useAuthState();
@@ -12,6 +13,7 @@ onMounted(async() => {
 <template>
   <NuxtLayout>
     <NuxtPage />
+    <Toaster />
   </NuxtLayout>
 </template>
 

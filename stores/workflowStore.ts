@@ -1,4 +1,56 @@
 import { defineStore } from "pinia";
+import type { ListNode } from "./serviceStore";
+
+export type WorkflowExecution = {
+  id: number;
+  workflow: Workflow;
+  statistics: WorkflowExecutionStatistics;
+  trace: WorkflowExecutionTrace;
+  firstTraceId: number;
+  status: WorkflowExecutionStatus;
+}
+
+export type WorkflowExecutionStatistics = {
+  dataUsed: WorkflowExecutionStatisticsDataUsed;
+  duration: WorkflowExecutionStatisticsDuration;
+  nodesExecuted: number;
+}
+
+export enum WorkflowExecutionStatus {
+  RUNNING = 'RUNNING',
+  COMPLETED = 'COMPLETED',
+  FAILED = 'FAILED',
+}
+
+export type WorkflowExecutionTrace = {
+  id: number;
+  node: ListNode;
+  input: any;
+  output: any;
+  config: any;
+  warnings: string[];
+  errors: string[];
+  statistics: WorkflowTraceStatistics;
+  previous?: WorkflowExecutionTrace;
+  next: WorkflowExecutionTrace[];
+  data: any;
+  index: number;
+}
+
+export type WorkflowExecutionStatisticsDataUsed = {
+  upload: number;
+  download: number;
+}
+
+export type WorkflowExecutionStatisticsDuration = {
+  start: Date;
+  end: Date;
+}
+
+export type WorkflowTraceStatistics = {
+  dataUsed: WorkflowExecutionStatisticsDataUsed;
+  duration: WorkflowExecutionStatisticsDuration;
+}
 
 export type WorkflowNode = {
   id: number;
@@ -154,6 +206,20 @@ export const useWorkflowStore = defineStore("workflows", () => {
     return await response.json();
   }
 
+  async function getWorkflowTraces(workflowId: number) {
+    const backend = useBackend();
+
+    const response = await backend.authFetch(`/workflows/${workflowId}/executions`, {
+      method: "GET",
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch workflow traces");
+    }
+
+    return await response.json();
+  }
+
   function clear() {
     workflows.value = [];
   }
@@ -169,6 +235,7 @@ export const useWorkflowStore = defineStore("workflows", () => {
     deleteWorkflow,
     updateWorkflowState,
     updateWorkflow,
+    getWorkflowTraces,
     clear,
   };
 });

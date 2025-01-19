@@ -16,6 +16,12 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger
+} from '@/components/ui/accordion'
 
 
 
@@ -33,6 +39,7 @@ const workflowStore = useWorkflowStore();
 const serviceStore = useServiceStore();
 const nodeStore = useNodeStore();
 const workflowNodes = ref<WorkflowNode[]>([]);
+const workflowTrace = ref<WorkflowExecution[]>([]);
 
 onMounted(async () => {
   await workflowStore.fetchWorkflows();
@@ -44,6 +51,8 @@ onMounted(async () => {
     maxNodeX.value = background.getBoundingClientRect().width;
     maxNodeY.value = background.getBoundingClientRect().height;
   }
+  workflowTrace.value = await workflowStore.getWorkflowTraces(workflowId);
+  console.log(workflowTrace.value);
 });
 
 function resetWorkflow() {
@@ -439,10 +448,19 @@ async function deleteWorkflow() {
             <i class="fa-regular fa-gauge-simple-min fa-lg cursor-pointer text-black"></i>
           </div>
         </DropdownMenuTrigger>
-        <DropdownMenuContent class="w-72 h-120">
-          <DropdownMenuLabel>Create a new Node</DropdownMenuLabel>
+        <DropdownMenuContent class="w-120 h-120">
+          <DropdownMenuLabel>Workflow Traces</DropdownMenuLabel>
           <DropdownMenuSeparator class="mb-2" />
-
+          <ScrollArea class="h-[90%]">
+            <Accordion type="single" class="w-full" collapsible>
+              <AccordionItem v-for="item in workflowTrace" :key="item.id" :value="'trace-' + item.id.toString()">
+                <AccordionTrigger>Workflow Trace {{ item.id }} [{{ item.status }}]</AccordionTrigger>
+                <AccordionContent>
+                  <pre class=" bg-searchbar-background text-xxs">{{ JSON.stringify(item.trace, null, 2) }}</pre>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </ScrollArea>
         </DropdownMenuContent>
       </DropdownMenu>
 
@@ -501,7 +519,7 @@ async function deleteWorkflow() {
       </DropdownMenu>
 
       <div>
-        <i class="fa-regular fa-broom fa-lg cursor-pointer text-black"></i>
+        <i class="fa-regular fa-broom fa-lg text-white"></i>
       </div>
     </div>
 

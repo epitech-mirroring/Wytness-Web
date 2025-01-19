@@ -34,6 +34,7 @@
 
 <template>
   <div
+    tabindex="0"
     class="flex flex-col p-2.5 gap-4 rounded-md w-72 connection shadow hover:shadow-lg"
     :style="{ '--color': props.bgColor }" :class="bgColor === '#FFFFFF' ? 'border border-navbar-border' : ''"
     @mouseover="connectButton = props.connected ? 'DISCONNECT' : 'CONNECT'"
@@ -50,10 +51,13 @@
     </div>
 
     <div
+      tabindex="0"
       class="flex gap-1.5 items-center self-end px-2.5 rounded border cursor-pointer font-medium hover:shadow"
       :class="props.connected ? 'connected' : 'connect'"
       :style="{ '--color': props.bgColor === '#FFFFFF' ? '#00000' : props.bgColor }"
       @click="props.connected ? serviceStore.disconnectService(props.serviceId) : serviceStore.connectService(props.serviceId)"
+      @keydown.enter="props.connected ? serviceStore.disconnectService(props.serviceId) : serviceStore.connectService(props.serviceId)"
+      @keydown.space="props.connected ? serviceStore.disconnectService(props.serviceId) : serviceStore.connectService(props.serviceId)"
     >
       <span>
         {{ connectButton }}

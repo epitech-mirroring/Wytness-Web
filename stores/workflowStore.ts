@@ -16,6 +16,7 @@ export type Workflow = {
   owner: number;
   serviceUsed: string[];
   status: string;
+  mobile: boolean;
 
   entrypoints: WorkflowNode[];
   nodes: WorkflowNode[];
@@ -69,7 +70,7 @@ export const useWorkflowStore = defineStore("workflows", () => {
   }
 
   async function fetchRecentWorkflows(limit: number) {
-    return await fetchWorkflowsWithParams("statistics.duration.start", "ASC", limit);
+    return await fetchWorkflowsWithParams("statistics.duration.start", "DESC", limit);
   }
 
   async function fetchWorkflowNodes(workflowId: number) : Promise<WorkflowNode[]> {
@@ -103,6 +104,56 @@ export const useWorkflowStore = defineStore("workflows", () => {
     return await response.json();
   }
 
+  async function deleteWorkflow(workflowId: number) {
+    const backend = useBackend();
+
+    const response = await backend.authFetch(`/workflows/${workflowId}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to delete workflow");
+    }
+
+    await fetchWorkflows();
+  }
+
+  async function updateWorkflowState(workflowId: number, active: boolean)
+  {
+    const backend = useBackend();
+
+    const response = await backend.authFetch(`/workflows/${workflowId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status: (active ? "enabled" : "disabled") }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to update workflow state");
+    }
+
+    await fetchWorkflows();
+    return await response.json();
+  }
+
+  async function updateWorkflow(workflowId: number, name: string, description: string, active: boolean)
+  {
+    const backend = useBackend();
+
+    const response = await backend.authFetch(`/workflows/${workflowId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, description, status: (active ? "enabled" : "disabled") }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to update workflow");
+    }
+
+    await fetchWorkflows();
+    return await response.json();
+  }
+
   function clear() {
     workflows.value = [];
   }
@@ -115,6 +166,9 @@ export const useWorkflowStore = defineStore("workflows", () => {
     getWorkflow,
     fetchWorkflowNodes,
     createWorfklow,
+    deleteWorkflow,
+    updateWorkflowState,
+    updateWorkflow,
     clear,
   };
 });

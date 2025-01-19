@@ -4,6 +4,19 @@ import LogoSVG from "~/components/ui/LogoSVG.vue";
 import NodeCard from "~/components/ui/NodeCard.vue";
 import NodeCardSimplified from "~/components/ui/NodeCardSimplified.vue";
 import { ScrollArea } from "~/components/ui/scroll-area";
+import { useToast } from '@/components/ui/toast/use-toast'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
+
 
 
 definePageMeta({
@@ -13,6 +26,8 @@ definePageMeta({
     layout: "workflows",
   });
 
+const { toast } = useToast()
+const router = useRouter();
 const workflowId = parseInt(useRoute().params.workflowId as string);
 const workflowStore = useWorkflowStore();
 const serviceStore = useServiceStore();
@@ -355,6 +370,41 @@ async function saveNodeNewPosition(nodeId: number, x: number, y: number) {
   }
 }
 
+const workflowActiveSwitch = ref(workflowStore.workflows.find((workflow) => workflow.id === workflowId)?.status === 'enabled');
+
+async function updateWorkflowParameters() {
+  const workflowName = (document.getElementById("workflow-name") as HTMLInputElement).value;
+  const workflowDescription = (document.getElementById("workflow-description") as HTMLTextAreaElement).value;
+  const workflowActive = workflowActiveSwitch.value;
+  try {
+    await workflowStore.updateWorkflow(workflowId, workflowName, workflowDescription, workflowActive);
+    toast({
+      title: 'Workflow updated',
+      description: 'The workflow has been updated successfully',
+    })
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+async function deleteWorkflow() {
+  try {
+    await workflowStore.deleteWorkflow(workflowId);
+    toast({
+      title: 'Workflow deleted',
+      description: 'The workflow has been deleted successfully',
+    })
+    router.push('/workflows')
+  } catch (e) {
+    console.log(e);
+    toast({
+      title: 'Error',
+      description: 'An error occurred while deleting the workflow',
+      variant: 'destructive',
+    })
+  }
+}
+
 </script>
 
 <template>
@@ -363,26 +413,96 @@ async function saveNodeNewPosition(nodeId: number, x: number, y: number) {
     <NodeCard
       v-for="(node, index) in nodesElements"
       :key="index"
+      :workflow-id="workflowId"
       :id="node.id"
       :node-id="node.nodeId"
       :x="node.position.x"
       :y="node.position.y"
       :max-x="maxNodeX"
       :max-y="maxNodeY"
+      :config="node.config"
       @link-node="linkNode"
       @drop-link-on-node="dropLinkOnNode"
       @move-node="updateLinkWhenNodeMoved"
       @unlink-node="unlinkNode"
       @drop="saveNodeNewPosition"
+      @need-refresh="synchronizeWorkflow"
     />
 
   </div>
 
   <div class="flex items-center gap-5 bg-white border border-navbar-border fixed bottom-14	inset-x-2/4 -translate-x-2/4 py-2 px-2.5 w-52 rounded-full">
     <div class="flex justify-between items-center w-full">
-      <i class="fa-regular fa-gauge-simple-min fa-lg cursor-pointer"></i>
-      <i class="fa-regular fa-gear fa-lg cursor-pointer"></i>
-      <i class="fa-regular fa-broom fa-lg cursor-pointer"></i>
+      <DropdownMenu>
+        <DropdownMenuTrigger as-child>
+          <div>
+            <i class="fa-regular fa-gauge-simple-min fa-lg cursor-pointer text-black"></i>
+          </div>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent class="w-72 h-120">
+          <DropdownMenuLabel>Create a new Node</DropdownMenuLabel>
+          <DropdownMenuSeparator class="mb-2" />
+
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      <DropdownMenu>
+        <DropdownMenuTrigger as-child>
+          <div>
+            <i class="fa-regular fa-gear fa-lg cursor-pointer text-black"></i>
+          </div>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent class="w-72 h-120">
+          <DropdownMenuLabel>Workflow Parameters</DropdownMenuLabel>
+          <DropdownMenuSeparator class="mb-2" />
+          <div class="flex flex-col gap-4 px-1 pt-1.5">
+            <div class="flex flex-col gap-1">
+              <Label for="workflow-name" class="text-sm text-text-muted pl-1">Workflow Name</Label>
+              <Input
+                id="workflow-name"
+                type="text"
+                class="w-full h-8 border border-navbar-border rounded-md"
+                :default-value="workflowStore.workflows.find((workflow) => workflow.id === workflowId)?.name"
+              />
+            </div>
+            <div class="flex flex-col gap-1">
+              <Label for="workflow-description" class="text-sm text-text-muted pl-1">Workflow Description</Label>
+              <Textarea id="workflow-description" class="w-full h-20 border border-navbar-border rounded-md" :default-value="workflowStore.workflows.find((workflow) => workflow.id === workflowId)?.description" />
+            </div>
+            <div class="flex justify-between items-center px-1">
+              <Label for="workflow-active" class="text-sm text-text-muted">Active</Label>
+              <SwitchSquare id="workflow-active pr-4" :default-checked="workflowStore.workflows.find((workflow) => workflow.id === workflowId)?.status === 'enabled'" @update:checked="workflowActiveSwitch = !workflowActiveSwitch" />
+            </div>
+
+            <div class="flex justify-between items-center px-1 pt-8">
+              <AlertDialog>
+                <AlertDialogTrigger as-child>
+                  <Button variant="destructive">Delete workflow</Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Delete workflow</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This action cannot be undone. Are you sure you want to delete this workflow?
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction @click="deleteWorkflow">Confirm</AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+
+              <Button class="bg-primary text-white rounded-md" @click="updateWorkflowParameters">Save</Button>
+            </div>
+
+          </div>
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      <div>
+        <i class="fa-regular fa-broom fa-lg cursor-pointer text-black"></i>
+      </div>
     </div>
 
   <DropdownMenu>

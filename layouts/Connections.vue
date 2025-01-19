@@ -5,9 +5,9 @@
       <div class="absolute bottom-3 w-1/3 flex justify-between items-center gap-5 font-[Inter] text-xs">
         <p class="text-gray-600 ms-5">© 2024 Wytness. All rights reserved.</p>
         <div class="flex gap-3 items-center me-5">
-          <a class="hover:underline">Pricacy Policy</a>
+          <a class="hover:underline" href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">Pricacy Policy</a>
           <div class="w-1 h-1 rounded bg-slate-300"></div>
-          <a class="hover:underline">Term & Condition</a>
+          <a class="hover:underline" href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">Term & Condition</a>
         </div>
       </div>
     </div>

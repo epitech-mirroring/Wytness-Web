@@ -14,7 +14,7 @@ const formSchema = z.object({
   firstName: z.string().min(2).max(50),
   lastName: z.string().min(2).max(50),
   password: z.string().min(2).max(50),
-  confirmPassword: z.string(),
+  confirmPassword: z.string().min(2).max(50),
 });
 
 const router = useRouter();
@@ -174,6 +174,12 @@ async function signInWithGoogle() {
           @click="
             async (e) => {
               e.preventDefault();
+
+              if (values.password !== values.confirmPassword) {
+                setErrors({ confirmPassword: 'Passwords do not match' });
+                return; // Ne pas soumettre le formulaire si les mots de passe ne correspondent pas
+              }
+
               await validate();
 
               if (meta.valid) {

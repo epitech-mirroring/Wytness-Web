@@ -53,7 +53,7 @@ const navigateTo = async (path: string) => {
 </script>
 
 <template>
-  <div class="flex flex-col min-w-64 pb-4 pt-2 pl-2 min-h-120 border-r-navbar-border border-r">
+  <div class="flex flex-col min-w-64 pb-4 pt-2 pl-2 h-screen min-h-120 border-r-navbar-border border-r">
     <div class="project-logo flex pr-2.5 pl-3 gap-2 self-stretch items-center cursor-pointer" @click="navigateTo('dashboard')">
       <div class="navbar-title-logo flex flex-col py-1.5 items-center self-stretch justify-center">
         <svg width="47" height="37" viewBox="0 0 47 37" fill="none" xmlns="http://www.w3.org/2000/svg">

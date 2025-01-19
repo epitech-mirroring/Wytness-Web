@@ -57,10 +57,9 @@
     @click="editWorkflow"
     >
     <div class="flex gap-2.5 items-center">
-      <div class="flex">
-        <LogoSquare v-for="(service, i) in props.services.slice(0,3)" :serviceName="service" :pos="i" :max="props.services.length" class="max-[820px]:hidden" />
-        <LogoSquare v-for="(service, i) in props.services.slice(0,1)" :serviceName="service" :pos="i" :max="props.services.length" class="min-[820px]:hidden" />
-        <LogoSquare v-for="i in 4 - props.services.length" serviceName="" :pos="props.services.length + i" :max="props.services.length" class="max-[820px]:hidden" />
+      <div class="flex max-[820px]:hidden" >
+        <LogoSquare v-for="(service, i) in props.services.slice(0,3)" :serviceName="service" :pos="i" :max="props.services.length" />
+        <LogoSquare v-for="i in Math.max(4 - props.services.length, 0)" serviceName="" :pos="props.services.length + i" :max="props.services.length" />
 
         <div
           v-if="props.services.length > 3"

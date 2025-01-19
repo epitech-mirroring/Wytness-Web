@@ -74,6 +74,27 @@ export const useNodeStore = defineStore("nodes", () => {
         return await response.json();
     }
 
+    async function updateNodeConfig(workflowId: number, nodeId: number, config: { key: string; value: string }[]) {
+        const backend = useBackend();
+
+        const response = await backend.authFetch(`/workflows/${workflowId}/nodes/${nodeId}`, {
+            method: "PATCH",
+            body: JSON.stringify({ config: {
+                ...config.reduce((acc, { key, value }) => ({ ...acc, [key]: value }), {}),
+                }
+            }),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error("Failed to update node config");
+        }
+
+        return await response.json();
+    }
+
     async function createNode(workflowId: number, nodeId: number, position: { x: number; y: number }) {
         const backend = useBackend();
 
@@ -92,6 +113,20 @@ export const useNodeStore = defineStore("nodes", () => {
         return await response.json();
     }
 
+    async function deleteNode(workflowId: number, nodeId: number) {
+        const backend = useBackend();
+
+        const response = await backend.authFetch(`/workflows/${workflowId}/nodes/${nodeId}`, {
+            method: "DELETE",
+        });
+
+        if (!response.ok) {
+            throw new Error("Failed to delete node");
+        }
+
+        return;
+    }
+
     function clear() {
         usedLabels.value = {};
     }
@@ -102,8 +137,10 @@ export const useNodeStore = defineStore("nodes", () => {
         getUsedLabelsValue,
         updateNodePosition,
         createNode,
+        deleteNode,
         removeNodePreviousLink,
         addNodePreviousLink,
+        updateNodeConfig,
         clear,
     };
 });

@@ -2,6 +2,7 @@
   import { useStatisticStore } from '#build/imports'
   import { SwitchSquare } from '@/components/ui/switch'
   import { onMounted } from 'vue'
+  import { useToast } from '@/components/ui/toast'
   import LogoSquare from './logoSquare.vue'
 
   interface WorkflowCardProps {
@@ -22,7 +23,9 @@
   });
 
   const router = useRouter();
+  const { toast } = useToast();
   const statisticStore = useStatisticStore();
+  const workflowStore = useWorkflowStore();
   const workflowStat = ref(
     {
       executions: 0,
@@ -42,8 +45,12 @@
     workflowStat.value = await statisticStore.getWorkflowStatistic(props.workflowId);
   });
 
-  const activateWorkflow = (active : boolean) => {
-    console.log("Activate workflow", active);
+  const activateWorkflow = async (active : boolean) => {
+    await workflowStore.updateWorkflowState(props.workflowId, active);
+    toast({
+      title: 'Workflow updated',
+      description: `Workflow ${props.workflowName} is now ${active ? 'active' : 'inactive'}`,
+    });
   };
 
   const editWorkflow = () => {

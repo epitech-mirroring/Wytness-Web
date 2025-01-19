@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import ServiceCard from '~/components/ui/ServiceCard.vue';
+  import { onMounted } from 'vue';
 
   definePageMeta({
     title: "Connections",
@@ -9,6 +10,10 @@
   });
 
   const serviceStore = useServiceStore();
+
+  onMounted(async () => {
+    await serviceStore.fetchConnections();
+  });
 </script>
 
 <template>

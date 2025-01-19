@@ -20,7 +20,9 @@ export enum NodeType {
 export type ListNode = {
   id: number;
   name: string;
+  description: string;
   type: NodeType;
+  labels: string[];
 };
 
 export type Connection = {
@@ -47,6 +49,22 @@ export const useServiceStore = defineStore("services", () => {
     services.value = await response.json();
   }
 
+  async function fetchServicesNodes() {
+    const backend = useBackend();
+
+    for (const service of services.value) {
+      const response = await backend.authFetch(`/services/${service.name}/nodes`, {
+        method: "GET",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch services nodes");
+      }
+
+      service.nodes = await response.json();
+    }
+  }
+
   async function fetchConnections() {
     const backend = useBackend();
 
@@ -67,6 +85,12 @@ export const useServiceStore = defineStore("services", () => {
       throw new Error("Service not found");
     }
     return service;
+  }
+
+  function getServiceFromNode(nodeId: number) {
+    return services.value.find((service) =>
+      service.nodes.some((node) => node.id === nodeId),
+    );
   }
 
   async function connectService(serviceId: string) {
@@ -127,21 +151,49 @@ export const useServiceStore = defineStore("services", () => {
     return node?.name;
   }
 
+  async function getNode(nodeId: number) {
+    if (services.value.length === 0) {
+      await fetchServices();
+      await fetchServicesNodes();
+    }
+    if (services.value.length === 0) {
+      return undefined;
+    }
+    if (services.value[0].nodes === undefined) {
+      await fetchServicesNodes();
+    }
+    if (services.value[0].nodes === undefined) {
+      return undefined;
+    }
+    return services.value
+      .flatMap((service) => service.nodes)
+      .find((node) => node.id === nodeId);
+  }
+
   function getNumberOfConnectedServices() {
     return connections.value.filter((connection) => connection.connected)
       .length;
   }
 
+  function clear() {
+    services.value = [];
+    connections.value = [];
+  }
+
   return {
     services,
     fetchServices,
+    fetchServicesNodes,
     connections,
     fetchConnections,
     getServiceWithId,
+    getServiceFromNode,
     connectService,
     disconnectService,
     postConnection,
     getNodeName,
+    getNode,
     getNumberOfConnectedServices,
+    clear,
   };
 });

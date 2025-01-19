@@ -3,8 +3,9 @@ const serviceStore = useServiceStore();
 
 const authState = useAuthState();
 
-onMounted(() => {
-  serviceStore.fetchServices();
+onMounted(async() => {
+  await serviceStore.fetchServices();
+  await serviceStore.fetchServicesNodes();
 });
 </script>
 

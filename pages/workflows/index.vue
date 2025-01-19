@@ -21,7 +21,7 @@
 
   const workflowStore = useWorkflowStore();
 
-  const workflows = ref([]);
+  const router = useRouter();
 
   const pageIndex = ref(1);
 
@@ -29,6 +29,10 @@
     workflowStore.fetchWorkflows();
   });
 
+  async function createWorkflow() {
+    const newWorkflow = await workflowStore.createWorfklow("New Workflow", "New Workflow Description");
+    router.push(`/workflows/${newWorkflow.id}`);
+  }
 
 </script>
 
@@ -48,7 +52,7 @@
     </div>
 
     <div class="flex justify-center self-center pb-20">
-      <Pagination v-slot="{ page }" :total="workflows.length" :sibling-count="1" show-edges :default-page="1" :itemsPerPage="7">
+      <Pagination v-slot="{ page }" :total="workflowStore.workflows.length" :sibling-count="1" show-edges :default-page="1" :itemsPerPage="7">
         <PaginationList v-slot="{ items }" class="flex items-center gap-1">
           <PaginationFirst class="hover:bg-navbar-hover-background" @click="pageIndex=1" />
           <PaginationPrev class="hover:bg-navbar-hover-background" @click="pageIndex-=1"/>
@@ -63,12 +67,12 @@
           </template>
 
           <PaginationNext class="hover:bg-navbar-hover-background" @click="pageIndex+=1" />
-          <PaginationLast class="hover:bg-navbar-hover-background" @click="pageIndex=Math.ceil(workflows.length/7)"/>
+          <PaginationLast class="hover:bg-navbar-hover-background" @click="pageIndex=Math.ceil(workflowStore.workflows.length/7)"/>
         </PaginationList>
       </Pagination>
     </div>
     <div class="flex absolute rounded-full bg-primary hover:bg-primary/90 text-white bottom-6 right-6 h-16 aspect-square items-center justify-center cursor-pointer">
-      <span class="text-5xl">+</span>
+      <span class="text-5xl" @click="createWorkflow">+</span>
     </div>
 
   </div>

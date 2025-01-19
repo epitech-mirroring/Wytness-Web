@@ -90,6 +90,19 @@ export const useStatisticStore = defineStore("statistic", () => {
         return Math.ceil(userStatistic.value.dataUsedUpload / 1000 / 1000);
     }
 
+    function clear() {
+        userStatistic.value = {
+            workflows: -1,
+            executions: -1,
+            successfulExecutions: -1,
+            failedExecutions: -1,
+            dataUsedDownLoad: -1,
+            dataUsedUpload: -1,
+            nodesExecuted: -1,
+        };
+        workflowsStatistic.value = [];
+    }
+
   return {
     userStatistic,
     workflowsStatistic,
@@ -98,5 +111,6 @@ export const useStatisticStore = defineStore("statistic", () => {
     getWorkflowStatistic,
     getUserDownloadedDatainMo,
     getUserUploadedDatainMo,
+    clear,
   };
 });

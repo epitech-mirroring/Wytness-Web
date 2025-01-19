@@ -6,6 +6,16 @@ const router = useRouter();
 const serviceStore = useServiceStore();
 
 onMounted(async () => {
+  const isiPhone = /iPhone/i.test(navigator.userAgent);
+  const isAndroid = /Android/i.test(navigator.userAgent);
+  if (isiPhone || isAndroid) {
+    if (!query.code || !query.state) {
+      router.push("area://redirect");
+    } else {
+      router.push("area://redirect");
+      // window.location.href = `area://redirect?code=${query.code}&state=${query.state}`;
+    }
+  } else
   if (!user) {
     await router.push("/");
   } else if (
@@ -30,6 +40,7 @@ onMounted(async () => {
   <div class="h-screen w-screen flex items-center justify-center">
     <h1 class="text-3xl">You are being redirected</h1>
   </div>
+
 </template>
 
 <style scoped></style>

@@ -53,13 +53,13 @@
 
 <template>
   <div
-    class="flex p-5 pr-8 self-stretch items-center rounded-lg border border-navbar-border cursor-pointer shadow justify-between hover:shadow-lg"
+    class="flex p-5 pr-8 max-[830px]:p-3 self-stretch items-center rounded-lg border border-navbar-border cursor-pointer shadow justify-between hover:shadow-lg"
     @click="editWorkflow"
     >
     <div class="flex gap-2.5 items-center">
-      <div class="flex">
+      <div class="flex max-[820px]:hidden" >
         <LogoSquare v-for="(service, i) in props.services.slice(0,3)" :serviceName="service" :pos="i" :max="props.services.length" />
-        <LogoSquare v-for="i in 4 - props.services.length" serviceName="" :pos="props.services.length + i" :max="props.services.length" />
+        <LogoSquare v-for="i in Math.max(4 - props.services.length, 0)" serviceName="" :pos="props.services.length + i" :max="props.services.length" />
 
         <div
           v-if="props.services.length > 3"
@@ -77,11 +77,11 @@
             {{props.workflowDescription}}
           </span>
 
-          <svg xmlns="http://www.w3.org/2000/svg" width="4" height="5" viewBox="0 0 4 5" fill="none">
+          <svg class="max-[920px]:hidden" xmlns="http://www.w3.org/2000/svg" width="4" height="5" viewBox="0 0 4 5" fill="none">
             <circle cx="2" cy="2.35999" r="2" fill="#A2A6AC"/>
           </svg>
 
-          <div class="flex gap-2 items-center">
+          <div class="flex gap-2 items-center max-[920px]:hidden">
             <div class="flex gap-1 items-center">
               <i class="far fa-download"></i>
               <span>

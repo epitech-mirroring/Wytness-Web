@@ -50,7 +50,7 @@ function blur() {
 </script>
 
 <template>
-    <div class="flex bg-searchbar-background items-center gap-2.5 px-2.5 py-1.5 text-navbar-inactive searchbar md:w-[300px] lg:w-[400px] rounded-md">
+    <div class="max-[800px]:hidden flex bg-searchbar-background items-center gap-2.5 px-2.5 py-1.5 text-navbar-inactive searchbar md:w-[300px] lg:w-[400px] rounded-md">
       <i class="fa-solid fa-search text-searchbar-icon "></i>
       <Input
         id="searchbar"
@@ -65,11 +65,10 @@ function blur() {
         <div class="flex bg-white h-8 aspect-square items-center justify-center rounded-md font-bold leading-4 shadow-md">
           <span >⌘</span>
         </div>
-
         <div class="flex bg-white h-8 aspect-square items-center justify-center rounded-md font-medium shadow-md">
           <span>K</span>
-      </div>
         </div>
+      </div>
       </div>
       <div class="absolute">
         <div id="results" class="border-t border-r border-l rounded-md overflow-hidden bg-white">
